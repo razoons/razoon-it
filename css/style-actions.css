@@ -1,0 +1,138 @@
+#c7594 {
+  bottom: 0px;
+  margin: 0px 0px 16px 0px;
+}
+
+#c9728 {
+  bottom: 0px;
+  margin: 0px 0px 16px 0px;
+  width: 100%;
+  height: 29px;
+  border: 5px solid #ffffff;
+  border-radius: 10px 10px 10px 10px;
+}
+
+.bdg-action-team {
+  background-color: #b83d3d;
+  width: 54%;
+  border: 3px solid #c0c0c0;
+  border-radius: 10px 10px 10px 10px;
+  height: 170px;
+  display: inline-block;
+}
+
+.bdg-action-team {
+  margin-bottom: 50px;
+}
+
+.action-team-title {
+  font-size: 44px;
+  float: none;
+  padding: 0px 0px 0px 0px;
+  margin: 20px 0px 0px 10px;
+}
+
+.action-team-users {
+  display: inline-block;
+  width: 160px;
+  height: auto;
+  top: 0px;
+  position: relative;
+}
+
+.c8935 {
+  display: inline-block;
+  position: relative;
+  top: 7px;
+  margin: 0px 0px 0px 15px;
+  width: 30px;
+}
+
+.c9104 {
+  padding: 10px;
+  display: inline-block;
+  top: -8px;
+  position: relative;
+  font-weight: 700;
+  font-size: 26px;
+  height: auto;
+}
+
+.action-team-progress {
+  display: inline-block;
+  width: 293px;
+  height: auto;
+  margin: 0px 0px 0px 71px;
+  position: relative;
+  top: -35px;
+}
+
+.action-team-progress-empty {
+  height: 60px;
+  width: 100%;
+  position: static;
+  top: 0px;
+  min-height: auto;
+  padding: 0px 0px 0px 0px;
+  bottom: 0px;
+  margin: 0px 0px 16px 0px;
+  width: 100%;
+  height: 30px;
+  border: 5px solid black;
+  border-radius: 10px 10px 10px 10px;
+}
+
+.c12100 {
+  padding: 10px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 24px;
+}
+
+.action-team-progress-full {
+  max-width:100%;
+  height: 24px;
+  top: -2px;
+  left: -2px;
+  position: relative;
+}
+
+.img_sprite, .img_sprite_admission {
+  display: inline-block;
+  width: 120px;
+  margin: 0px 0px 0px 49px;
+  height: 120px;
+  overflow: hidden;
+}
+
+.sprite {
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .navbar-burger {
+    display: block;
+  }
+  .navbar-items-c {
+    display: none;
+    width: 100%;
+  }
+  .navbar-menu {
+    width: 100%;
+  }
+  .navbar-menu-link {
+    display: block;
+  }
+}
+
+.helper {
+  position: absolute;
+  color: #0071b8;
+  padding: 5px;
+  font-weight: bold;
+  font-style: italic;
+  border: #2c2c2c solid 2px;
+  background-color: white;
+  display:none;
+  width:200px;
+}

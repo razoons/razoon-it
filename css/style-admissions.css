@@ -1,0 +1,206 @@
+
+#i07ldi{
+  color:#328491;
+}
+#ivfgvi{
+  background-color:#328491;
+}
+#i7u8fr{
+  width:auto;
+  height:100px;
+  display:inline-block;
+  background-color:#7db83d;
+}
+#irt3xr{
+  width:auto;
+  height:100px;
+  display:inline-block;
+  background-color:#7db83d;
+}
+
+.select{
+  width:30%;
+  margin-bottom:15px;
+  padding-top:7px;
+  padding-right:10px;
+  padding-bottom:7px;
+  padding-left:10px;
+  border-top-left-radius:2px;
+  border-top-right-radius:2px;
+  border-bottom-right-radius:2px;
+  border-bottom-left-radius:2px;
+  color:rgb(255, 255, 255);
+  background-color:rgb(85, 76, 87);
+  border-top-width:initial;
+  border-right-width:initial;
+  border-bottom-width:initial;
+  border-left-width:initial;
+  border-top-style:none;
+  border-right-style:none;
+  border-bottom-style:none;
+  border-left-style:none;
+  border-top-color:initial;
+  border-right-color:initial;
+  border-bottom-color:initial;
+  border-left-color:initial;
+  border-image-source:initial;
+  border-image-slice:initial;
+  border-image-width:initial;
+  border-image-outset:initial;
+  border-image-repeat:initial;
+  height:30px;
+}
+.label{
+  width:406px;
+  color:#0071b8;
+  font-size:39px;
+  display:inline-block;
+  position:relative;
+  top:10px;
+}
+.button{
+  margin-top:15px;
+  margin-right:auto;
+  margin-bottom:15px;
+  margin-left:auto;
+  border-top-width:initial;
+  border-right-width:initial;
+  border-bottom-width:initial;
+  border-left-width:initial;
+  border-top-style:none;
+  border-right-style:none;
+  border-bottom-style:none;
+  border-left-style:none;
+  border-top-color:initial;
+  border-right-color:initial;
+  border-bottom-color:initial;
+  border-left-color:initial;
+  border-image-source:initial;
+  border-image-slice:initial;
+  border-image-width:initial;
+  border-image-outset:initial;
+  border-image-repeat:initial;
+  color:rgb(255, 255, 255);
+  border-top-left-radius:2px;
+  border-top-right-radius:2px;
+  border-bottom-right-radius:2px;
+  border-bottom-left-radius:2px;
+  font-size:1em;
+  cursor:pointer;
+  align-self:auto;
+  align-items:flex-start;
+  flex-direction:row;
+  justify-content:flex-start;
+  background-color:#0071b8;
+  float:none;
+  text-align:center;
+  left:0px;
+  position:static;
+  width:115px;
+  margin:auto auto auto 57px;
+  padding:10px 10px 10px 10px;
+  display:inline-block;
+}
+.form-group{
+  width:100%;
+}
+#action-team-1{
+  background-color:rgb(36, 91, 181);
+}
+#c5028{
+  width:80%;
+}
+#c5129{
+  width:64%;
+}
+#c5228{
+  width:0%;
+}
+
+#c7594{
+  bottom:0px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:16px;
+  margin-left:0px;
+}
+#c9728{
+  bottom:0px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:16px;
+  margin-left:0px;
+  width:100%;
+  height:29px;
+  border-top-width:5px;
+  border-right-width:5px;
+  border-bottom-width:5px;
+  border-left-width:5px;
+  border-top-style:solid;
+  border-right-style:solid;
+  border-bottom-style:solid;
+  border-left-style:solid;
+  border-top-color:rgb(255, 255, 255);
+  border-right-color:rgb(255, 255, 255);
+  border-bottom-color:rgb(255, 255, 255);
+  border-left-color:rgb(255, 255, 255);
+  border-image-source:initial;
+  border-image-slice:initial;
+  border-image-width:initial;
+  border-image-outset:initial;
+  border-image-repeat:initial;
+  border-top-left-radius:10px;
+  border-top-right-radius:10px;
+  border-bottom-right-radius:10px;
+  border-bottom-left-radius:10px;
+}
+.c7571{
+  padding:20px 10px 10px 10px;
+  float:left;
+  font-size:35px;
+  color:#ffffff;
+  height:100px;
+  background-color:#7db83d;
+  width:450px;
+
+}
+.c7693{
+  font-size:40px;
+  text-align:center;
+  background-color:#ffffff;
+  padding:10px 10px 10px 10px;
+  border-radius:40px 40px 40px 40px;
+  color:#7db83d;
+  float:right;
+  margin:5px 10px 0px 25px;
+}
+
+
+.img_sprite{
+  display: inline-block;
+  height: 100px;
+  overflow: hidden;
+  width: 100px;
+  margin-left:30px;
+}
+
+.sprite{
+  width:100%;
+  position:relative;
+}
+
+@media (max-width: 768px){
+  .navbar-burger{
+    display:block;
+  }
+  .navbar-items-c{
+    display:none;
+    width:100%;
+  }
+  .navbar-menu{
+    width:100%;
+  }
+  .navbar-menu-link{
+    display:block;
+  }
+}

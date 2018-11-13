@@ -32,10 +32,12 @@
 				<div class="form-group"><label class="label">Number of teams</label><input type="text" class="input" name="nbr_teams" /></div>
 				<div class="form-group"><label class="label">Number of spies per team</label><input type="text" class="input" name="min_nbr_spies" placeholder="minimum"/><input type="text" class="input" name="max_nbr_spies" placeholder="maximum"/></div>
 				<div class="form-group"><label class="label">Gain for coding</label><input type="text" class="input" name="gain_coding"/></div>
-				<div class="form-group"><label class="label">Gain for bugging</label><input type="text" class="input" name="gain_bugging"/></div>
 				<div class="form-group"><label class="label">Gain for hacking</label><input type="text" placeholder="coding*1.5" class="input" name="gain_hacking"/></div>
-				<div class="form-group"><label class="label">Gain for dealing</label><input type="text" placeholder="coding" class="input" name="gain_dealing"/></div>
 				<div class="form-group"><label class="label">Gain for firewall</label><input type="text" placeholder="coding" class="input" name="gain_firewalling"/></div>
+				<!--ces champs vont degager-->
+				<div class="form-group"><label class="label">Gain for bugging</label><input type="text" class="input" name="gain_bugging"/></div>
+				<div class="form-group"><label class="label">Gain for dealing</label><input type="text" placeholder="coding" class="input" name="gain_dealing"/></div>
+				<!--ces champs vont degager-->
 				<div class="form-group"><label class="label">Coding objective</label><input type="text" placeholder="codingGain*nbr_players" class="input" name="code_objective"/></div>
 				<div class="c6293">Players</div>
 				<div class="form-group">

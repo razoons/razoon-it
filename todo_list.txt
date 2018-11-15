@@ -1,8 +1,11 @@
+
+#------------------------------------------------------
+#BRANCH | gains_migration
 -remove fields from the create_game.php
   -any gain fields
 -to add a new sql table to contain gain parameters (to clean up the list of gains to stick to latest design)
 -to call the new sql table whenever we need to get coding parameters
-
+#------------------------------------------------------
 
 Implement logic as below:
 A code | B code --> A(+100) B(+100)

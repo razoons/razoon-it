@@ -1,0 +1,4 @@
+-remove fields from the create_game.php
+  -any gain fields
+-to add a new sql table to contain gain parameters (to clean up the list of gains to stick to latest design)
+-to call the new sql table whenever we need to get coding parameters

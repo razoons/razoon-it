@@ -34,7 +34,7 @@ session_start();
    </div>
   </section>
   <script type="text/javascript">
-  document.body.style.background= "#0071b8 url(\"../resources/it_wallpaper_white.png\") repeat";
+  document.body.style.background= "#0071b8 url(\"./resources/it_wallpaper_white.png\") repeat";
  document.body.style.backgroundSize = "1%";
   </script>
 </body>

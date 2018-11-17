@@ -43,18 +43,18 @@ session_start();
 <section class="bdg-sect">
 	The game is split in x turns. Each turn starts at midnight and ends 24 hours later. The game is in pause during the weekend (the turn starting on Friday morning ends on Sunday night).
 	<br/>During a turn, each user can take one of the 4 different actions:
-	<br/><br/><div><div class="result_team"><img src="../resources/code.png"></div><div class="explain_1"><b>Code:</b> This action allows the user to code an amount of lines for his/her company.</div></div>
-	<br/><div><div class="result_team"><img src="../resources/firewall.png"></div><div class="explain_1"><b>Firewall:</b> This action allows the user to protect his company from attacks (hacks or deals). If his/her firewall blocks an attack, his/her company will gain some lines of code.
+	<br/><br/><div><div class="result_team"><img src="./resources/code.png"></div><div class="explain_1"><b>Code:</b> This action allows the user to code an amount of lines for his/her company.</div></div>
+	<br/><div><div class="result_team"><img src="./resources/firewall.png"></div><div class="explain_1"><b>Firewall:</b> This action allows the user to protect his company from attacks (hacks or deals). If his/her firewall blocks an attack, his/her company will gain some lines of code.
 	<br/>A firewall is only effective during one turn, even if it didn't block any attack. It can't block more than 1 attack.</div></div>
-	<br/><div><div class="result_team"><img src="../resources/hack.png"></div><div class="explain_1"><b>Hack:</b> This action allows the user to hack another company. If the hack is blocked by a firewall, it has no effect but if it's not, his/her company will gain some lines of code.</div></div>
-	<br/><div><div class="result_team"><img src="../resources/deal.png"></div><div class="explain_1"><b>Deal:</b> This action allows the user to deal with another company. If the deal is blocked, it has no effect but if it's not blocked, the user steals some lines of code from his/her company and give it to another company.</div></div>
+	<br/><div><div class="result_team"><img src="./resources/hack.png"></div><div class="explain_1"><b>Hack:</b> This action allows the user to hack another company. If the hack is blocked by a firewall, it has no effect but if it's not, his/her company will gain some lines of code.</div></div>
+	<br/><div><div class="result_team"><img src="./resources/deal.png"></div><div class="explain_1"><b>Deal:</b> This action allows the user to deal with another company. If the deal is blocked, it has no effect but if it's not blocked, the user steals some lines of code from his/her company and give it to another company.</div></div>
 	<br/> The firewalls blocks attacks in this order:
 	<ol>
 	<li> Minor hacks (small number of hacks coming from the same company)</li>
 	<li> Massive hacks (large number of hacks coming from the same company)</li>
 	<li> Deals (hacks coming from the attacked company itself)</li>
 	</ol>
-	<
+	
 	<br/><br/><b>Particularities:</b>
 	<br/>When hacking or dealing a team, a user can not get more than what the team currently has.
 	<br/>During the actions resolution, hacks and deals will always be processed before the coding.
@@ -85,7 +85,7 @@ session_start();
 	<br/>As for the exclusions, if majority has not been reached of the next turn, the admission is cancelled.
 </section>
   <script type="text/javascript">
-	document.body.style.background= "#0071b8 url(\"../resources/it_wallpaper_white.png\") repeat";
+	document.body.style.background= "#0071b8 url(\"./resources/it_wallpaper_white.png\") repeat";
  document.body.style.backgroundSize = "1%";
 
 

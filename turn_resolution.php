@@ -100,35 +100,70 @@ while ($list_games=$req_list_games->fetch()){
 		$req_list_teams = $bdd->query('SELECT * FROM teams WHERE game_id='.$list_games['id'].'');
 		while ($list_teams=$req_list_teams->fetch()){
 
-
+			
 
 			//-------------------PRODUCTION-----------------------------------
-
+			//When coding 
+			
 			//Count number of production from this team
 			$req_list_actions = $bdd->query('SELECT COUNT(*) as number_actions_code FROM actions WHERE game_id='.$list_games['id'].' AND team_id='.$list_teams['id'].' AND action="code" AND turn='.$list_games['current_turn'].'');
 			$number_actions_code=$req_list_actions->fetch();
-			$new_production['code'][$list_teams['id']]=$number_actions_code['number_actions_code']*$list_games['code_gain'];
+			$new_production['code'][$list_teams['id']] = $number_actions_code['number_actions_code']*$list_games['code_gain'];
 			
-			//-------------------BUG-----------------------------------
 
-			//Count number of bugs from this team
-			$req_list_actions = $bdd->query('SELECT COUNT(*) as number_actions_bug FROM actions WHERE game_id='.$list_games['id'].' AND team_id='.$list_teams['id'].' AND action="bug" AND turn='.$list_games['current_turn'].'');
-			$number_actions_bug=$req_list_actions->fetch();
-			$new_production['bug'][$list_teams['id']]=$number_actions_bug['number_actions_bug']*$list_games['bug_gain'];
-
-
-			//-------------------HACKS-----------------------------------
-
+			//-------------------HACKING-----------------------------------
+			//When hacking successfully
+			
 			//retrieving number of hacks to consider
 			$new_production['hack'][$list_teams['id']]=0;
 			$req_list_hacks = $bdd->query('SELECT COUNT(*) as count_hack_per_team, target_team_id FROM actions WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND blocked=0 AND team_id='.$list_teams['id'].' AND action="hack" GROUP BY target_team_id');
 			while($list_hacks=$req_list_hacks->fetch()){
-				$new_production['hack'][$list_teams['id']]+=min($teams[$list_hacks['target_team_id']]['production_progress'],$list_hacks['count_hack_per_team']*$list_games['hack_gain']);
+				//Hacking gain is minimum between default value and current production progress
+				$hacking_gain = min($teams[$list_hacks['target_team_id']]['production_progress'],$list_hacks['count_hack_per_team']*$list_games['hack_gain']);
+				
+				//Hacking team gains production
+				$new_production['hack'][$list_teams['id']] += $hacking_gain;
 			}
 
+			
+			//--------------------HACKED--------------------------------
+			//When being hacked 
+			
+			//retrieving number of successfull hacks against the team
+			$new_production['hacked'][$list_teams['id']] = 0;
+			$req_list_hacked = $bdd->query('SELECT COUNT(*) as count_hack FROM actions WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND blocked=0 AND target_team_id='.$list_teams['id'].' AND action="hack"');
+			$list_hacked = $req_list_hacked->fetch();
+			
+			$hacking_loss = min($teams[$list_teams['id']]['production_progress'],$list_hacked['count_hack']*$list_games['hack_gain']);
+			
+			$new_production['hacked'][$list_teams['id']] = $hacking_loss;
+			
 
-
-
+			//-------------------BLOCKING FIREWALL-----------------------------------
+			//When firewalling successfully
+			
+			//retrieving number of incoming blocked hacks to consider
+			$new_production['blocking'][$list_teams['id']]=0;
+			$req_list_firewall = $bdd->query('SELECT COUNT(*) as count_firewall_per_team, team_id FROM actions WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND blocked=1 AND target_team_id='.$list_teams['id'].' AND action="hack" GROUP BY target_team_id');
+			while($list_firewall=$req_list_firewall->fetch()){
+				$blocking_gain = min($teams[$list_firewall['team_id']]['production_progress'], $list_firewall['count_firewall_per_team']*$list_games['firewall_gain']);
+				
+				$new_production['blocking'][$list_teams['id']] += $blocking_gain;
+			}
+			
+			
+			//-------------------BLOCKED BY FIREWALL-----------------------------------
+			//When hacking but being blocked by firewall
+			
+			//retrieving number of hacks blocked by enemy to consider
+			$new_production['blocked'][$list_teams['id']]=0;
+			$req_list_blocked = $bdd->query('SELECT COUNT(*) as count_blocks FROM actions WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND blocked=1 AND team_id='.$list_teams['id'].' AND action="hack"');
+			$list_blocked = $req_list_blocked->fetch();
+			
+			$blocked_loss = min($teams[$list_teams['id']]['production_progress'],$list_blocked['count_blocks']*$list_games['firewall_gain']);
+			$new_production['blocked'][$list_teams['id']] = $blocked_loss;
+			
+			
 			//-------------------DEALS-----------------------------------
 
 			//retrieving number of deals to consider
@@ -139,18 +174,8 @@ while ($list_games=$req_list_games->fetch()){
 						$new_production['deal'][$list_teams['id']]+=min($teams[$list_deals['team_id']]['production_progress'],$list_deals['count_deal_per_team']*$list_games['deal_gain']);
 					}
 			}
-
-
-			//-------------------BLOCKING FIREWALL-----------------------------------
-
-			//retrieving number of blocked hacks and deals to consider
-			$new_production['blocked'][$list_teams['id']]=0;
-			$req_list_deal = $bdd->query('SELECT COUNT(*) as count_deal_per_team FROM actions WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND blocked=1 AND ((target_team_id='.$list_teams['id'].' AND action="hack") OR (team_id='.$list_teams['id'].' AND action="deal"))');
-			$list_deals=$req_list_deal->fetch();
-			$new_production['blocked'][$list_teams['id']]=$list_deals['count_deal_per_team']*$list_games['firewall_gain'];
-
-
-
+			
+			
 			//-------------------STOLEN-----------------------------------
 
 			$new_production['stolen'][$list_teams['id']]=0;
@@ -164,11 +189,11 @@ while ($list_games=$req_list_games->fetch()){
 
 
 			//check if the team reaches the total_code
-			$new_production['new_total'][$list_teams['id']]=$teams[$list_teams['id']]['production_progress']+$new_production['code'][$list_teams['id']]-$new_production['bug'][$list_teams['id']]+$new_production['hack'][$list_teams['id']]+$new_production['deal'][$list_teams['id']]-$new_production['stolen'][$list_teams['id']]+$new_production['blocked'][$list_teams['id']];
+			$new_production['new_total'][$list_teams['id']]=$teams[$list_teams['id']]['production_progress'] + $new_production['code'][$list_teams['id']] + $new_production['hack'][$list_teams['id']] - $new_production['hacked'][$list_teams['id']] + $new_production['blocking'][$list_teams['id']] - $new_production['blocked'][$list_teams['id']] + $new_production['deal'][$list_teams['id']] - $new_production['stolen'][$list_teams['id']];
 			if (intval($new_production['new_total'][$list_teams['id']])>=intval($list_games['target'])){
 				$target_reached=true;
 			}
-			echo $teams[$list_teams['id']]['production_progress']."+".$new_production['code'][$list_teams['id']]."+".$new_production['hack'][$list_teams['id']]."+".$new_production['deal'][$list_teams['id']]."-".$new_production['stolen'][$list_teams['id']]."+".$new_production['blocked'][$list_teams['id']]."<br/>";
+			echo $teams[$list_teams['id']]['production_progress']."+".$new_production['code'][$list_teams['id']]."+".$new_production['hack'][$list_teams['id']]."-".$new_production['hacked'][$list_teams['id']]."+".$new_production['blocking'][$list_teams['id']]."-".$new_production['blocked'][$list_teams['id']]."+".$new_production['deal'][$list_teams['id']]."-".$new_production['stolen'][$list_teams['id']]."<br/>";
 		}
 
 
@@ -179,7 +204,7 @@ while ($list_games=$req_list_games->fetch()){
 			  'id' => $list_teams['id'],
 			  'production_progress' =>$new_production['new_total'][$list_teams['id']]
 			  ));
-			$store_result=$bdd->exec('INSERT INTO reports (game_id,team_id,turn,prod_before,code,hack,deal,stolen,blocked) VALUES ('.$list_games['id'].','.$list_teams['id'].','.$list_games['current_turn'].','.$teams[$list_teams['id']]['production_progress'].','.$new_production['code'][$list_teams['id']].','.$new_production['hack'][$list_teams['id']].','.$new_production['deal'][$list_teams['id']].','.$new_production['stolen'][$list_teams['id']].','.$new_production['blocked'][$list_teams['id']].')');
+			$store_result=$bdd->exec('INSERT INTO reports (game_id,team_id,turn,prod_before,code,hack,hacked,blocking,blocked,deal,stolen) VALUES ('.$list_games['id'].','.$list_teams['id'].','.$list_games['current_turn'].','.$teams[$list_teams['id']]['production_progress'].','.$new_production['code'][$list_teams['id']].','.$new_production['hack'][$list_teams['id']].','.$new_production['hacked'][$list_teams['id']].','.$new_production['blocking'][$list_teams['id']].','.$new_production['blocked'][$list_teams['id']].','.$new_production['deal'][$list_teams['id']].','.$new_production['stolen'][$list_teams['id']].')');
 		}
 
 		//Remove all previous notifications
@@ -241,7 +266,7 @@ while ($list_games=$req_list_games->fetch()){
 		}
 
 		//Incrementing turn
-	  $update_turn=$bdd->prepare('UPDATE games SET current_turn=:new_turn WHERE id=:id');
+		$update_turn=$bdd->prepare('UPDATE games SET current_turn=:new_turn WHERE id=:id');
 			if ($list_games['current_turn']==$list_games['turns']){
 				$new_turn=-1;
 			}else{
@@ -251,11 +276,11 @@ while ($list_games=$req_list_games->fetch()){
 					$new_turn=$list_games['current_turn']+1;
 				}
 			}
-			$update_turn->execute(array(
+		$update_turn->execute(array(
 	    'id' => $list_games['id'],
 	    'new_turn' => $new_turn
 	    ));
-		 }
+	}
 }
 
 	?>

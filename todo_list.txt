@@ -7,10 +7,6 @@
 -to call the new sql table whenever we need to get coding parameters
 #------------------------------------------------------
 
-Implement logic as below:
-A code | B code --> A(+100) B(+100)
-A code | B hack --> A(-100) B(+100)
-A code | B firewall --> A(+100) B(0)
-A hack | B hack --> A(-100+100) B(+100-100)
-A hack | B firewall --> A(-100) B(+100)
-A firewall | B firewall --> A(0) B(0)
+TO FIX:
+ - When lines of code = max (1000/1000) on Home, slider not filled totally
+ 

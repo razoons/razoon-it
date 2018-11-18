@@ -181,9 +181,9 @@ if (isset($_SESSION['user'])){
 			$reports_firewall=$req_reports_firewall->fetch();
 
 			if ($reports_actions['action']=="code"){ ?>
-				<div class="result_team"><img src="./resources/code.png"></div><span class="title_result">You were <?php echo $reports_code['total_code'];?> user(s) coding for your company</span>
+				<div class="result_team"><img src="./resources/code.png"></div><span class="title_result">You were <?php $num = $reports_code['total_code']; if($num == 1){echo "alone";}else{echo "{$num} users";}?> coding for your company</span>
 			<?php }elseif ($reports_actions['action']=="hack"){?>
-				<div class="result_team"><img src="./resources/hack.png"></div><span class="title_result">You were <?php echo $reports_deal['total_hack']+$reports_hack['total_hack'];?> user(s) hacking <b><?php echo $teams['team'][$reports_hack['target_team_id']];?></b> (<?php echo $reports_hack['total_blocked']+$reports_deal['total_blocked'];?> were blocked).<br/>
+			<div class="result_team"><img src="./resources/hack.png"></div><span class="title_result">You were <?php $num = $reports_deal['total_hack']+$reports_hack['total_hack']; if($num == 1){echo "alone";}else{echo "{$num} users";}?> hacking <b><?php echo $teams['team'][$reports_hack['target_team_id']];?></b> (<?php $num = $reports_hack['total_blocked']+$reports_deal['total_blocked']; if($num == 1){echo "{$num} was";}else{echo "{$num} were";};?> blocked).<br/>
 				<?php if($reports_actions['blocked']==0){?>
 					<span class="good">Your hack was successful.</span>
 				<?php }else{?>
@@ -199,9 +199,9 @@ if (isset($_SESSION['user'])){
 				<?php } ?>
 				</span>
 			<?php }elseif ($reports_actions['action']=="firewall"){ ?>
-				<div class="result_team"><img src="./resources/firewall.png"></div><span class="title_result">You were <?php echo $reports_firewall['total_firewall'];?> user(s) protecting <b><?php echo $teams['team'][$reports_actions['team_id']];?></b>.<br/>    <?php echo $reports_deal['total_hack']+$reports_deal_2['total_hack']-$reports_deal['total_blocked']-$reports_deal_2['total_blocked'];?> hacks were successful<br/>    <?php echo $reports_deal['total_blocked'];?> internal hacks were blocked.<br/>    <?php echo $reports_deal_2['total_blocked']?> external hacks were blocked.<br/>
+				<div class="result_team"><img src="./resources/firewall.png"></div><span class="title_result">You were <?php $num = $reports_firewall['total_firewall']; if($num == 1){echo "alone";}else{echo "{$num} users";};?> protecting <b><?php echo $teams['team'][$reports_actions['team_id']];?></b>.<br/>    <?php echo $reports_deal['total_hack']+$reports_deal_2['total_hack']-$reports_deal['total_blocked']-$reports_deal_2['total_blocked'];?> hacks were successful<br/>    <?php echo $reports_deal['total_blocked'];?> internal hacks were blocked.<br/>    <?php echo $reports_deal_2['total_blocked']?> external hacks were blocked.<br/>
 			<?php }}else{?>
-				<div class="result_team"><img src="./resources/nothing.png"></div><span class="title_result">You didn't take any action last turn</span> <?php }?>
+				<div class="result_team"><img src="./resources/nothing.png"></div><span class="title_result">You didn't take any action last turn.</span> <?php }?>
 
 	  </section>
 	<?php }?>

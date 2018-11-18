@@ -168,11 +168,11 @@ while ($list_games=$req_list_games->fetch()){
 
 
 			//check if the team reaches the total_code
-			$new_production['new_total'][$list_teams['id']]=$teams[$list_teams['id']]['production_progress'] + $new_production['code'][$list_teams['id']] + $new_production['hack'][$list_teams['id']] - $new_production['hacked'][$list_teams['id']] + $new_production['blocking'][$list_teams['id']] - $new_production['blocked'][$list_teams['id']] + $new_production['deal'][$list_teams['id']] - $new_production['stolen'][$list_teams['id']];
+			$new_production['new_total'][$list_teams['id']]=$teams[$list_teams['id']]['production_progress'] + $new_production['code'][$list_teams['id']] + $new_production['hack'][$list_teams['id']] - $new_production['hacked'][$list_teams['id']] + $new_production['blocking'][$list_teams['id']] - $new_production['blocked'][$list_teams['id']] /*+ $new_production['deal'][$list_teams['id']] - $new_production['stolen'][$list_teams['id']]*/;
 			if (intval($new_production['new_total'][$list_teams['id']])>=intval($list_games['target'])){
 				$target_reached=true;
 			}
-			echo $teams[$list_teams['id']]['production_progress']."+".$new_production['code'][$list_teams['id']]."+".$new_production['hack'][$list_teams['id']]."-".$new_production['hacked'][$list_teams['id']]."+".$new_production['blocking'][$list_teams['id']]."-".$new_production['blocked'][$list_teams['id']]."+".$new_production['deal'][$list_teams['id']]."-".$new_production['stolen'][$list_teams['id']]."<br/>";
+			echo $teams[$list_teams['id']]['production_progress']."+".$new_production['code'][$list_teams['id']]."+".$new_production['hack'][$list_teams['id']]."-".$new_production['hacked'][$list_teams['id']]."+".$new_production['blocking'][$list_teams['id']]."-".$new_production['blocked'][$list_teams['id']]./*"+".$new_production['deal'][$list_teams['id']]."-".$new_production['stolen'][$list_teams['id']].*/"<br/>";
 		}
 
 
@@ -183,7 +183,7 @@ while ($list_games=$req_list_games->fetch()){
 			  'id' => $list_teams['id'],
 			  'production_progress' =>$new_production['new_total'][$list_teams['id']]
 			  ));
-			$store_result=$bdd->exec('INSERT INTO reports (game_id,team_id,turn,prod_before,code,hack,hacked,blocking,blocked,deal,stolen) VALUES ('.$list_games['id'].','.$list_teams['id'].','.$list_games['current_turn'].','.$teams[$list_teams['id']]['production_progress'].','.$new_production['code'][$list_teams['id']].','.$new_production['hack'][$list_teams['id']].','.$new_production['hacked'][$list_teams['id']].','.$new_production['blocking'][$list_teams['id']].','.$new_production['blocked'][$list_teams['id']].','.$new_production['deal'][$list_teams['id']].','.$new_production['stolen'][$list_teams['id']].')');
+			$store_result = $bdd->exec('INSERT INTO reports(game_id,team_id,turn,prod_before,code,hack,hacked,blocking,blocked,deal,stolen) VALUES ('.$list_games['id'].','.$list_teams['id'].','.$list_games['current_turn'].','.$teams[$list_teams['id']]['production_progress'].','.$new_production['code'][$list_teams['id']].','.$new_production['hack'][$list_teams['id']].','.$new_production['hacked'][$list_teams['id']].','.$new_production['blocking'][$list_teams['id']].','.$new_production['blocked'][$list_teams['id']].',0,0)');
 		}
 
 		//Remove all previous notifications

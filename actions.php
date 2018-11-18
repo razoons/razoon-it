@@ -20,6 +20,9 @@ if (isset($_SESSION['user'])){
   $req=$bdd->query('SELECT * FROM actions WHERE user="'.$_SESSION['user'].'" AND turn='.$_SESSION['current_turn'].'');
   $action=$req->fetch();
 
+	$req_configuration = $bdd->query('SELECT * FROM configuration');
+	$configuration=$req_configuration->fetch();
+
   $admissions=[];
 	$req=$bdd->query('SELECT * FROM admissions WHERE target_user="'.$_SESSION['user'].'"');
 	while ($admissions_req=$req->fetch()){

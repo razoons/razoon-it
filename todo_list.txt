@@ -8,5 +8,6 @@
 #------------------------------------------------------
 
 TO FIX:
- - When lines of code = max (1000/1000) on Home, slider not filled totally
+ - When lines of code = max (1000/1000) on Home, slider not totally filled
+ - Empty name for new company name is accepted
  

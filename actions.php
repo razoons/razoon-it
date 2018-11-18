@@ -82,19 +82,11 @@ if (isset($_SESSION['user'])){
         <img class="sprite3 sprite" src="resources/firewall.png" <?php if ($action['action']=="firewall"){ echo 'data-selected="true"';}?>/>
       </div>
 			<div class="helper">Blocks hacks & deals directed to your team.<?php if($configuration['firewall_gain']<>0){echo "+".$configuration['firewall_gain']." lines of code if blocking";}?></div>
-	<div class="img_sprite" data-type="bug" data-id=<?php echo $list_teams['id']; ?>>
-        <img class="sprite3 sprite" src="resources/bug.png" <?php if ($action['action']=="bug"){ echo 'data-selected="true"';}?>/>
-			</div>
-			<div class="helper">Your team produces -<?php echo $configuration['bug_gain'];?> lines of code</div>
     <?php }else{ ?>
       <div class="img_sprite" data-type="hack" data-id=<?php echo $list_teams['id']; ?>>
         <img class="sprite3 sprite" src="resources/hack.png" <?php if (($action['action']=="hack") AND ($action['target_team_id']==$list_teams['id'])){ echo 'data-selected="true"';}?>/>
       </div>
 			<div class="helper">If not blocked, your team produces +<?php echo $configuration['hack_gain'];?> lines of code</div>
-      <div class="img_sprite" data-type="deal" data-id=<?php echo $list_teams['id']; ?>>
-        <img class="sprite3 sprite" src="resources/deal.png" <?php if (($action['action']=="deal") AND ($action['target_team_id']==$list_teams['id'])){ echo 'data-selected="true"';}?>/>
-      </div>
-			<div class="helper">If not blocked, you steal +<?php echo $configuration['deal_gain'];?> lines of code from your team</div>
 			<form class="form" id="submit_action" action="submit_action.php" method="post">
 		    <input type="hidden" id="action" name="action"/>
 		    <input type="hidden" id="team" name="team"/>

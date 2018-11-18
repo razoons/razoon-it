@@ -53,15 +53,10 @@ for ($i=0;$i<$nbr_spies;$i++){
 }
 
 //Insert game
-$insert_game=$bdd->prepare('INSERT INTO games(current_turn,turns,target,code_gain,bug_gain,hack_gain,deal_gain,firewall_gain) VALUES (1,:turns,:target,:code_gain,:bug_gain,:hack_gain,:deal_gain,:firewall_gain)');
+$insert_game=$bdd->prepare('INSERT INTO games(current_turn,turns,target) VALUES (1,:turns,:target)');
 $insert_game->execute(array(
 'turns' => $_POST['nbr_turns'],
-'target' => $_POST['code_objective'],
-'code_gain' => $_POST['gain_coding'],
-'bug_gain' => $_POST['gain_bugging'],
-'hack_gain' => $_POST['gain_hacking'],
-'deal_gain' => $_POST['gain_dealing'],
-'firewall_gain' => $_POST['gain_firewalling']
+'target' => $_POST['code_objective']
 ));
 $insert_game->closeCursor();
 

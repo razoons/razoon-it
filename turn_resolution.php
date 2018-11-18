@@ -90,11 +90,13 @@ while ($list_games=$req_list_games->fetch()){
 					 $hack_actions_ordered['team_id'][]=$list_actions['team_id'];
 					 $hack_actions_ordered['id'][]=$list_actions['id'];
 				}
-
-				//for the first items (until number of firewall), action is updated and set as blocked
-				$update_action=$bdd->prepare('UPDATE actions SET blocked=1 WHERE id=:id');
-				for ($i=0;$i<$number_actions_firewall['number_actions_firewall'];$i++){
-					$update_action->execute(array('id' => $hack_actions_ordered['id'][$i]));
+				
+				if(!empty($hack_actions_ordered)){
+					//for the first items (until number of firewall), action is updated and set as blocked
+					$update_action=$bdd->prepare('UPDATE actions SET blocked=1 WHERE id=:id');
+					for ($i=0;$i<$number_actions_firewall['number_actions_firewall'];$i++){
+						$update_action->execute(array('id' => $hack_actions_ordered['id'][$i]));
+					}
 				}
 		}
 

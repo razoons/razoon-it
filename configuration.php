@@ -80,14 +80,14 @@ if (isset($_SESSION['user'])){
 	}
 
 	<?php
-	if ($_SESSION['current_turn']==-1){?>
-		document.body.style.background= "#<?php echo $current_spy_team['color'];?> url(\"./resources/it_wallpaper_<?php echo $current_spy_team['font_color']; ?>.png\") repeat";
-	<?php }else{
-		 if (isset($current_team['id'])){ ?>
-			 document.body.style.background= "#<?php echo $current_team['color'];?> url(\"./resources/it_wallpaper_<?php echo $current_team['font_color']; ?>.png\") repeat";
-		 <?php }else{ ?>
-			 document.body.style.background= "#ffffff url(\"./resources/it_wallpaper_black.png\") repeat";
-		 <?php }}?>
+ if ($_SESSION['current_turn']==-1){?>
+	 document.body.style.background= "#<?php echo $current_spy_team['color'];?> url(\"./resources/it_wallpaper_<?php echo $current_spy_team['font_color']; ?>.png\") repeat";
+ <?php }else{
+		if (isset($current_team['id'])){ ?>
+			document.body.style.background= "#<?php echo $current_team['color'];?> url(\"./resources/it_wallpaper_<?php echo $current_team['font_color']; ?>.png\") repeat";
+		<?php }else{ ?>
+			document.body.style.background= "#ffffff url(\"./resources/it_wallpaper_black.png\") repeat";
+		<?php }}?>
 	document.body.style.backgroundSize = "1%";
     </script>
 </body>

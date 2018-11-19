@@ -19,7 +19,7 @@ $action_exists->execute(array(
 //if action not been inserted yet, create it
 if(!$action_exists->fetch())
 {
-	$insert_action=$bdd->prepare('INSERT INTO actions(user,team_id,action,target_team_id,game_id,turn,blocked,leak_risk, leak_team_id) VALUES (:user,:team_id,"",-1,:game_id,:turn,0,0,-1)');
+	$insert_action=$bdd->prepare('INSERT INTO actions(user,team_id,action,target_team_id,game_id,turn,blocked,leak_risk, leak_team_id, snitched) VALUES (:user,:team_id,"",-1,:game_id,:turn,0,0,-1,0)');
 	$insert_action->execute(array(
 		'user' => $_SESSION['user'],
 		'team_id' => $_SESSION['team_id'],
@@ -69,7 +69,7 @@ else
 	//remove action (but not the leak action part)
 	if($_POST['action']=="remove_action")
 	{
-		$remove_action = $bdd->prepare('UPDATE actions SET action="", target_team_id=0, team_id=0 WHERE user=:user AND turn=:turn');
+		$remove_action = $bdd->prepare('UPDATE actions SET action="", target_team_id=0 WHERE user=:user AND turn=:turn');
 		$remove_action->execute(array(
 		'user' => $_SESSION['user'],
 		'turn' => $_SESSION['current_turn']
@@ -79,11 +79,11 @@ else
 	//update the default action (not the leak part)
 	else
 	{
-		$insert_action=$bdd->prepare('UPDATE actions SET team_id=:team_id, action=:action, target_team_id=:target_team_id, turn=:turn');
+		$insert_action=$bdd->prepare('UPDATE actions SET action=:action, target_team_id=:target_team_id WHERE user=:user AND turn=:turn');
 		$insert_action->execute(array(
-		'team_id' => $_SESSION['team_id'],
 		'action' => $_POST['action'],
 		'target_team_id' => $_POST['team'],
+		'user' => $_SESSION['user'],
 		'turn' => $_SESSION['current_turn']
 		));
 	  $insert_action->closeCursor();

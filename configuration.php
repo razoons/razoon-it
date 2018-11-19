@@ -65,6 +65,7 @@ if (isset($_SESSION['user'])){
     <section id="i3ur7f" style="background-color:#<?php echo $teams['color'][$current_user['spy_team_id']];?>;color:<?php echo $teams['font_color'][$current_user['spy_team_id']];?>;"><img class="c4674" src="resources/<?php if ($current_user['spy_team_id']==$current_user['team_id']){echo "not_";}?>spy_<?php echo $teams['font_color'][$current_user['spy_team_id']];?>.png"><?php echo $teams['team'][$current_user['spy_team_id']];?></section>
   </section>
   <script type="text/javascript">
+	<?php if($current_team['updated']==0){ ?>
 	var team=document.getElementById('team');
 	var update=document.getElementById('update');
 	update.disabled=true;
@@ -78,16 +79,17 @@ if (isset($_SESSION['user'])){
 			update.disabled=true;
 		}
 	}
+	<?php } ?>
 
 	<?php
- if ($_SESSION['current_turn']==-1){?>
-	 document.body.style.background= "#<?php echo $current_spy_team['color'];?> url(\"./resources/it_wallpaper_<?php echo $current_spy_team['font_color']; ?>.png\") repeat";
- <?php }else{
-		if (isset($current_team['id'])){ ?>
-			document.body.style.background= "#<?php echo $current_team['color'];?> url(\"./resources/it_wallpaper_<?php echo $current_team['font_color']; ?>.png\") repeat";
-		<?php }else{ ?>
-			document.body.style.background= "#ffffff url(\"./resources/it_wallpaper_black.png\") repeat";
-		<?php }}?>
+	if ($_SESSION['current_turn']==-1){?>
+		document.body.style.background= "#<?php echo $current_spy_team['color'];?> url(\"./resources/it_wallpaper_<?php echo $current_spy_team['font_color']; ?>.png\") repeat";
+	<?php }else{
+		 if (isset($current_team['id'])){ ?>
+			 document.body.style.background= "#<?php echo $current_team['color'];?> url(\"./resources/it_wallpaper_<?php echo $current_team['font_color']; ?>.png\") repeat";
+		 <?php }else{ ?>
+			 document.body.style.background= "#ffffff url(\"./resources/it_wallpaper_black.png\") repeat";
+		 <?php }}?>
 	document.body.style.backgroundSize = "1%";
     </script>
 </body>

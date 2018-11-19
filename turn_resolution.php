@@ -84,13 +84,6 @@ while ($list_games=$req_list_games->fetch()){
 					}
 				}
 
-				// adding in the end the hacks from own team.
-				$req_list_actions = $bdd->query('SELECT * FROM `actions` WHERE game_id='.$list_games['id'].' AND action="deal" AND team_id='.$list_teams['id'].' AND turn='.$list_games['current_turn'].' ORDER by id DESC');
-				while ($list_actions=$req_list_actions->fetch()){
-					 $hack_actions_ordered['team_id'][]=$list_actions['team_id'];
-					 $hack_actions_ordered['id'][]=$list_actions['id'];
-				}
-				
 				if(!empty($hack_actions_ordered)){
 					//for the first items (until number of firewall), action is updated and set as blocked
 					$update_action=$bdd->prepare('UPDATE actions SET blocked=1 WHERE id=:id');

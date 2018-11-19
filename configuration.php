@@ -47,9 +47,9 @@ if (isset($_SESSION['user'])){
 	</section>
   <section class="bdg-sect">
 		<form action="update_team.php" method="post">
-			<div class="form-group"><label class="label_large">New company name</label><input type="text" placeholder="Type here your new company name" name="team" class="input input_large"/></div>
+			<div class="form-group"><label class="label_large">New company name</label><input type="text" placeholder="Type here your new company name" name="team" class="input input_large" id="team"/></div>
       <div class="form-group"><label class="label_large">New company color</label><input type="color" name="color" class="input"/></div>
-		<button class="button">Update</button>
+		<button id="update" class="button">Update</button>
 		</form>
   </section>
 	<?php } ?>
@@ -65,6 +65,20 @@ if (isset($_SESSION['user'])){
     <section id="i3ur7f" style="background-color:#<?php echo $teams['color'][$current_user['spy_team_id']];?>;color:<?php echo $teams['font_color'][$current_user['spy_team_id']];?>;"><img class="c4674" src="resources/<?php if ($current_user['spy_team_id']==$current_user['team_id']){echo "not_";}?>spy_<?php echo $teams['font_color'][$current_user['spy_team_id']];?>.png"><?php echo $teams['team'][$current_user['spy_team_id']];?></section>
   </section>
   <script type="text/javascript">
+	var team=document.getElementById('team');
+	var update=document.getElementById('update');
+	update.disabled=true;
+
+	team.addEventListener('change', disable_update.bind(null));
+
+	function disable_update(){
+		if (team.value!=""){
+			update.disabled=false;
+		}else{
+			update.disabled=true;
+		}
+	}
+
 	<?php
 	if ($_SESSION['current_turn']==-1){?>
 		document.body.style.background= "#<?php echo $current_spy_team['color'];?> url(\"./resources/it_wallpaper_<?php echo $current_spy_team['font_color']; ?>.png\") repeat";

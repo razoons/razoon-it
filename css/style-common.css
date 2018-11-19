@@ -282,3 +282,8 @@ body {
   color:#0071b8;
   margin:0px;
 }
+
+.button:disabled{
+  background-color:#b1b1b1;
+  color:#696969;
+}

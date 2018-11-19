@@ -5,8 +5,8 @@ SNITCH & LEAK:
  - Add snitch.png, leak_low.png and leak_high.png in resources
 
 TO FIX:
- - When lines of code = max (1000/1000) on Home, slider not totally filled
-
+ [LOW] When lines of code = max (1000/1000) on Home, slider not totally filled
+ [LOW] When game is over, actions can still be selected
 
 #---------------ANTOINE----------------------------------
  - Empty name for new company name is accepted (to fix because it's still cliquable)

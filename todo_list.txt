@@ -8,5 +8,5 @@ TO FIX:
 
 #---------------ANTOINE----------------------------------
  - Empty name for new company name is accepted (to fix because it's still cliquable)
-
+- display the snitcher result
 #---------------ANTOINE----------------------------------

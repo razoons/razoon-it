@@ -103,8 +103,6 @@ while ($list_games=$req_list_games->fetch()){
 		$req_list_teams = $bdd->query('SELECT * FROM teams WHERE game_id='.$list_games['id'].'');
 		while ($list_teams=$req_list_teams->fetch()){
 
-
-
 			//-------------------PRODUCTION-----------------------------------
 			//When coding
 
@@ -166,16 +164,80 @@ while ($list_games=$req_list_games->fetch()){
 			$blocked_loss = min($teams[$list_teams['id']]['production_progress'],$list_blocked['count_blocks']*$configuration['firewall_loss']);
 			$new_production['blocked'][$list_teams['id']] = $blocked_loss;
 
+			//---------------------SNITCHING--------------------------------
+			//When snitching
+			$new_production['snitch'][$list_teams['id']]=0;
+			$req_list_snitch = $bdd->query('SELECT COUNT(*) as count_snitch FROM actions WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND team_id='.$list_teams['id'].' AND action="snitch"');
+			$list_snitch = $req_list_snitch->fetch();
 
+			$new_production['snitch'][$list_teams['id']] = $list_snitch['count_snitch'];
+
+			//is the snitching successful ?
+			if($list_snitch['count_snitch'] > 0)
+			{
+				$req_list_leaks = $bdd->query('SELECT * FROM actions WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND team_id='.$list_teams['id'].' AND leak_risk != "0"');
+				while($list_leaks = $req_list_leaks->fetch()){
+					if($list_leaks['leak_risk']=="high")
+					{
+						$chance = 1/($configuration['snitch_high_chance']*$list_snitch['count_snitch'])-1;
+						if($chance < 0 )
+						{
+							$chance = 0;
+						}
+					}
+					else
+					{
+						$chance = 1/($configuration['snitch_low_chance']*$list_snitch['count_snitch'])-1;
+						if($chance < 0 )
+						{
+							$chance = 0;
+						}
+					}
+					if(rand(0,$chance)==0)
+					{
+						$bdd->query('UPDATE actions SET snitched=1 WHERE id='.$list_leaks['id'].'');
+					}
+				}
+			}
+			
+			//-----------------------RECEIVING LEAKS--------------------------------
+			$new_production['leak'][$list_teams['id']]=0;
+			
+			//receiving low risk leaks
+			$req_list_low_leak = $bdd->query('SELECT team_id, COUNT(*) as count_low_leak FROM actions WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND leak_team_id='.$list_teams['id'].' AND leak_risk="low" GROUP BY team_id');
+
+			while($list_low_leak=$req_list_low_leak->fetch()){
+				//Leaking gain is minimum between default value and current production progress
+				$leaking_gain = min($teams[$list_low_leak['team_id']]['production_progress'],$list_low_leak['count_low_leak']*$configuration['leak_low']);
+
+				//Receiving leak team gains production
+				$new_production['leak'][$list_teams['id']] += $leaking_gain;
+			}
+			
+			//receiving high risk leaks
+			$req_list_high_leak = $bdd->query('SELECT team_id, COUNT(*) as count_high_leak FROM actions WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND leak_team_id='.$list_teams['id'].' AND leak_risk="high" GROUP BY team_id');
+
+			while($list_high_leak=$req_list_high_leak->fetch()){
+				//Leaking gain is minimum between default value and current production progress
+				$leaking_gain = min($teams[$list_high_leak['team_id']]['production_progress'],$list_high_leak['count_high_leak']*$configuration['leak_high']);
+
+				//Receiving leak team gains production
+				$new_production['leak'][$list_teams['id']] += $leaking_gain;
+			}
+
+			//-----------------TOTAL PRODUCTION-----------------------------------
+			
 			//check if the team reaches the total_code
-			$new_production['new_total'][$list_teams['id']]=$teams[$list_teams['id']]['production_progress'] + $new_production['code'][$list_teams['id']] + $new_production['hack'][$list_teams['id']] - $new_production['hacked'][$list_teams['id']] + $new_production['blocking'][$list_teams['id']] - $new_production['blocked'][$list_teams['id']] /*+ $new_production['deal'][$list_teams['id']] - $new_production['stolen'][$list_teams['id']]*/;
+			$new_production['new_total'][$list_teams['id']] = $teams[$list_teams['id']]['production_progress'] + $new_production['code'][$list_teams['id']] + $new_production['hack'][$list_teams['id']] - $new_production['hacked'][$list_teams['id']] + $new_production['blocking'][$list_teams['id']] - $new_production['blocked'][$list_teams['id']] + $new_production['leak'][$list_teams['id']];
 			if (intval($new_production['new_total'][$list_teams['id']])>=intval($list_games['target'])){
 				$target_reached=true;
 			}
-			echo $teams[$list_teams['id']]['production_progress']."+".$new_production['code'][$list_teams['id']]."+".$new_production['hack'][$list_teams['id']]."-".$new_production['hacked'][$list_teams['id']]."+".$new_production['blocking'][$list_teams['id']]."-".$new_production['blocked'][$list_teams['id']]./*"+".$new_production['deal'][$list_teams['id']]."-".$new_production['stolen'][$list_teams['id']].*/"<br/>";
+			echo $teams[$list_teams['id']]['production_progress']."(progession)+".$new_production['code'][$list_teams['id']]."(code)+".$new_production['hack'][$list_teams['id']]."(hack)-".$new_production['hacked'][$list_teams['id']]."(hacked)+".$new_production['blocking'][$list_teams['id']]."(blocking)-".$new_production['blocked'][$list_teams['id']]."(blocked)+".$new_production['leak'][$list_teams['id']]."(leaks)<br/>";
+			
 		}
 
 
+		//Update total progress of teams
 		$req_list_teams = $bdd->query('SELECT * FROM teams WHERE game_id='.$list_games['id'].'');
 		while ($list_teams=$req_list_teams->fetch()){
 			$update_progress=$bdd->prepare('UPDATE teams SET production_progress=:production_progress WHERE id=:id');

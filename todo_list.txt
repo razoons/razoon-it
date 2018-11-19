@@ -3,8 +3,10 @@
 
 TO FIX:
  - When lines of code = max (1000/1000) on Home, slider not totally filled
+ - background of "configuration" page is not the same one
 
 
 #---------------ANTOINE----------------------------------
- - Empty name for new company name is accepted
+ - Empty name for new company name is accepted (to fix because it's still cliquable)
+
 #---------------ANTOINE----------------------------------

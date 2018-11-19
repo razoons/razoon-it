@@ -84,7 +84,12 @@ if (isset($_SESSION['user'])){
       <div class="img_sprite" data-type="firewall" data-id=<?php echo $list_teams['id']; ?>>
         <img class="sprite3 sprite" src="resources/firewall.png" <?php if ($action['action']=="firewall"){ echo 'data-selected="true"';}?>/>
       </div>
-			<div class="helper">Blocks hacks & deals directed to your team.<?php if($configuration['firewall_gain']<>0){echo "+".$configuration['firewall_gain']." lines of code if blocking";}?></div>
+			<div class="helper">Blocks hacks directed to your team. <?php if($configuration['firewall_gain']<>0){echo "+".$configuration['firewall_gain']." lines of code if blocking";}?></div>
+	  <div class="img_sprite" data-type="snitch" data-id=<?php echo $list_teams['id']; ?>>
+	    <img class="sprite3 sprite" src="resources/snitch.png" <?php if ($action['action']=="snitch"){ echo 'data-selected="true"';}?>/>
+	  </div>
+			<div class="helper">Tries to detect a leak from your team. <?php echo $configuration['snitch_low_chance']*100 . "% chance of detection for a low risk leak, " . $configuration['snitch_high_chance']*100 . "% chance for a high risk one." ?>
+			</div>
     <?php }else{ ?>
       <div class="img_sprite" data-type="hack" data-id=<?php echo $list_teams['id']; ?>>
         <img class="sprite3 sprite" src="resources/hack.png" <?php if (($action['action']=="hack") AND ($action['target_team_id']==$list_teams['id'])){ echo 'data-selected="true"';}?>/>

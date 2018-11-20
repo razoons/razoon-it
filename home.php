@@ -160,48 +160,63 @@ if (isset($_SESSION['user'])){
 		</section>
 		<section class="bdg-sect">
 		<?php
-			$req_reports_actions=$bdd->query('SELECT * FROM actions WHERE user="'.$_SESSION['user'].'" AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.'');
-			$reports_actions=$req_reports_actions->fetch();
-
-			if(isset($reports_actions['id'])){
-
-			$req_reports_code=$bdd->query('SELECT COUNT(*) as total_code FROM actions WHERE action="code" AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND target_team_id='.$reports_actions['target_team_id'].'');
+			$req_actions=$bdd->query('SELECT * FROM actions WHERE user="'.$_SESSION['user'].'" AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.'');
+			$actions=$req_actions->fetch();
+			
+			$req_reports = $bdd->query('SELECT * FROM reports WHERE game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND team_id='.$_SESSION['team_id']);
+			$reports=$req_reports->fetch();
+			
+			if(isset($actions['id'])){
+			
+			$req_configuration = $bdd->query('SELECT * FROM configuration');
+			$configuration=$req_configuration->fetch();
+			
+			$req_reports_code=$bdd->query('SELECT COUNT(*) as total_code FROM actions WHERE action="code" AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND target_team_id='.$actions['target_team_id'].'');
 			$reports_code=$req_reports_code->fetch();
 			if (!isset($reports_code['total_code'])){$reports_code['total_code']=0;}
 			
-			$req_reports_hack=$bdd->query('SELECT COUNT(*) as total_hack, SUM(blocked) as total_blocked, target_team_id FROM actions WHERE action="hack" AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND team_id='.$reports_actions['team_id'].' AND target_team_id='.$reports_actions['target_team_id'].' GROUP BY target_team_id');
+			$req_reports_hack=$bdd->query('SELECT COUNT(*) as total_hack, SUM(blocked) as total_blocked, target_team_id FROM actions WHERE action="hack" AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND team_id='.$actions['team_id'].' AND target_team_id='.$actions['target_team_id'].' GROUP BY target_team_id');
 			$reports_hack=$req_reports_hack->fetch();
 			if (is_null($reports_hack['total_blocked'])){$reports_hack['total_blocked']=0;}
 						
-			$req_reports_firewall=$bdd->query('SELECT COUNT(*) as total_firewall FROM actions WHERE action="firewall" AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND team_id='.$reports_actions['team_id'].'');
+			$req_reports_firewall=$bdd->query('SELECT COUNT(*) as total_firewall FROM actions WHERE action="firewall" AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND team_id='.$actions['team_id'].'');
 			$reports_firewall=$req_reports_firewall->fetch();
 
-			$req_reports_blocked=$bdd->query('SELECT COUNT(*) as total_hack, SUM(blocked) as total_blocked FROM actions WHERE action="hack" AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND target_team_id='.$reports_actions['team_id'].'');
+			$req_reports_blocked=$bdd->query('SELECT COUNT(*) as total_hack, SUM(blocked) as total_blocked FROM actions WHERE action="hack" AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND target_team_id='.$actions['team_id'].'');
 			$reports_blocked=$req_reports_blocked->fetch();
 			if (is_null($reports_blocked['total_blocked'])){$reports_blocked['total_blocked']=0;}
 			
-			$req_reports_snitch=$bdd->query('SELECT COUNT(*) as total_snitch FROM actions WHERE action="snitch" AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND target_team_id='.$reports_actions['target_team_id'].'');
+			$req_reports_snitch=$bdd->query('SELECT COUNT(*) as total_snitch FROM actions WHERE action="snitch" AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND target_team_id='.$actions['target_team_id'].'');
 			$reports_snitch=$req_reports_snitch->fetch();
 			if (!isset($reports_snitch['total_snitch'])){$reports_snitch['total_snitch']=0;}
 			
-			$req_reports_leak=$bdd->query('SELECT COUNT(*) as total_leak_blocked FROM actions WHERE snitched=1 AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND team_id='.$reports_actions['team_id'].'');
+			$req_reports_leak=$bdd->query('SELECT COUNT(*) as total_leak_blocked FROM actions WHERE snitched=1 AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND team_id='.$actions['team_id'].'');
 			$reports_leak=$req_reports_leak->fetch();
 			if (!isset($reports_leak['total_leak_blocked'])){$reports_leak['total_leak_blocked']=0;}
 			
-			if ($reports_actions['action']=="code"){ ?>
+			if ($actions['action']=="code"){ ?>
 				<div class="result_team"><img src="./resources/code.png"></div><span class="title_result">You were <?php $num = $reports_code['total_code']; if($num == 1){echo "alone";}else{echo "{$num} users";}?> coding for your company.</span>
-			<?php }elseif ($reports_actions['action']=="hack"){?>
+			<?php }elseif ($actions['action']=="hack"){?>
 			<div class="result_team"><img src="./resources/hack.png"></div><span class="title_result">You were <?php $num = $reports_hack['total_hack']; if($num == 1){echo "alone";}else{echo "{$num} users";}?> hacking <b><?php echo $teams['team'][$reports_hack['target_team_id']];?></b> (<?php $num = $reports_hack['total_blocked']; echo $num; if($num == 1){echo " was";}else{echo " were";};?> blocked).<br/>
-				<?php if($reports_actions['blocked']==0){?>
-					<span class="good">Your hack was successful.</span>
-				<?php }else{?>
-					<span class="bad">Your hack has failed.</span>
+				<?php
+				if($actions['blocked']==0){
+					if($reports['hack']==$configuration['hack_gain']){
+						?><span class="good">Your hack was totally successful (+<?php echo $reports['hack'];?>).</span><?php
+					}
+					elseif($reports['hack']==0){
+						?><span class="bad">Your hack was successful but didn't steal anything (+0).</span><?php
+					}
+					else{
+						?><span class="good">Your hack was successful but didn't steal as much as hoped (+<?php echo $reports['hack'];?>).</span><?php
+					}
+				}else{?>
+					<span class="bad">Your hack was blocked.</span>
 				<?php } ?>
 				</span>
-			<?php }elseif ($reports_actions['action']=="snitch"){ ?>
+			<?php }elseif ($actions['action']=="snitch"){ ?>
 			<div class="result_team"><img src="./resources/snitch.png"></div><span class="title_result">You were <?php $num = $reports_snitch['total_snitch']; if($num == 1){echo "alone";} else{echo "{$num} users";}?> snitching (<?php $num = $reports_leak['total_leak_blocked']; echo $num; if($num == 1){echo " leak was";}else{echo " leaks were";}?> discovered).<br/>
-			<?php }elseif ($reports_actions['action']=="firewall"){ ?>
-				<div class="result_team"><img src="./resources/firewall.png"></div><span class="title_result">You were <?php $num = $reports_firewall['total_firewall']; if($num == 1){echo "alone";}else{echo "{$num} users";};?> protecting <b><?php echo $teams['team'][$reports_actions['team_id']];?></b>.<br/><?php $num = $reports_blocked['total_blocked']; echo $num; if($num==1){echo " hack";}else{echo " hacks";}?> prevented.<br/> 
+			<?php }elseif ($actions['action']=="firewall"){ ?>
+				<div class="result_team"><img src="./resources/firewall.png"></div><span class="title_result">You were <?php $num = $reports_firewall['total_firewall']; if($num == 1){echo "alone";}else{echo "{$num} users";};?> protecting <b><?php echo $teams['team'][$actions['team_id']];?></b>.<br/><?php $num = $reports_blocked['total_blocked']; echo $num; if($num==1){echo " hack";}else{echo " hacks";}?> prevented.<br/> 
 			<?php }}else{?>
 				<div class="result_team"><img src="./resources/nothing.png"></div><span class="title_result">You didn't take any action last turn.</span> <?php }?>
 

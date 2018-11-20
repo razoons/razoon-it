@@ -8,8 +8,11 @@ TO FIX:
  [MEDIUM] Change the rules page to reflet the new snitch and leak actions
  [LOW] When lines of code = max (1000/1000) on Home, slider not totally filled
  [LOW] When game is over, actions can still be selected
+ [MEDIUM] When the screen width is small (mobile) the menu does not appear anymore. It actually doesn't occur always so might be linked to the name of the company or something else.
+ [MEDIUM] when you choose an action it sends a request to the server to store it. it may take time. In the meantime, the icon is not frozen. I would suggest to store the actions locally and have a "send" button.
 
 #---------------ANTOINE----------------------------------
- - Empty name for new company name is accepted (to fix because it's still cliquable)
+- Empty name for new company name is accepted (to fix because it's still cliquable)
 - display the snitcher result
+- display the leaker result
 #---------------ANTOINE----------------------------------

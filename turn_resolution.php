@@ -128,7 +128,7 @@ while ($list_games=$req_list_games->fetch()){
 			$req_list_hacked = $bdd->query('SELECT COUNT(*) as count_hack FROM actions WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND blocked=0 AND target_team_id='.$list_teams['id'].' AND action="hack"');
 			$list_hacked = $req_list_hacked->fetch();
 
-			$hacking_loss = min($teams[$list_teams['id']]['production_progress'],$list_hacked['count_hack']*$configuration['hack_loss']);
+			$hacking_loss = min($teams[$list_teams['id']]['production_progress'],$list_hacked['count_hack']*$configuration['code_loss']);
 
 			$new_production['hacked'][$list_teams['id']] = $hacking_loss;
 
@@ -154,7 +154,7 @@ while ($list_games=$req_list_games->fetch()){
 			$req_list_blocked = $bdd->query('SELECT COUNT(*) as count_blocks FROM actions WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND blocked=1 AND team_id='.$list_teams['id'].' AND action="hack"');
 			$list_blocked = $req_list_blocked->fetch();
 
-			$blocked_loss = min($teams[$list_teams['id']]['production_progress'],$list_blocked['count_blocks']*$configuration['firewall_loss']);
+			$blocked_loss = min($teams[$list_teams['id']]['production_progress'],$list_blocked['count_blocks']*$configuration['hack_loss']);
 			$new_production['blocked'][$list_teams['id']] = $blocked_loss;
 
 			//---------------------SNITCHING--------------------------------

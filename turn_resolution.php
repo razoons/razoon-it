@@ -180,17 +180,22 @@ while ($list_games=$req_list_games->fetch()){
 				while($list_leaks = $req_list_leaks->fetch()){
 					if($list_leaks['leak_risk']=="high")
 					{
-						$chance = 1/($configuration['snitch_high_chance']*$list_snitch['count_snitch'])-1;
-						if($chance < 0 ){$chance = 0;}
+						$chance = 1/$configuration['snitch_high_chance']-1;
 					}
 					else
 					{
-						$chance = 1/($configuration['snitch_low_chance']*$list_snitch['count_snitch'])-1;
-						if($chance < 0 ){$chance = 0;}
+						$chance = 1/$configuration['snitch_low_chance']-1;
 					}
-					if(rand(0,$chance)==0)
-					{
-						$bdd->query('UPDATE actions SET snitched=1 WHERE id='.$list_leaks['id'].'');
+					
+					if($chance < 0 ){$chance = 0;}
+					
+					//if multiple user snitching, multiple dice roll
+					for($i=0; $i<$list_snitch['count_snitch']; $i++){
+						if(rand(0,$chance)==0)
+						{
+							$bdd->query('UPDATE actions SET snitched=1 WHERE id='.$list_leaks['id'].'');
+							break; //stop at first successful snitch
+						}
 					}
 				}
 			}

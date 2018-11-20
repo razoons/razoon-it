@@ -93,6 +93,7 @@ while ($list_games=$req_list_games->fetch()){
 				}
 		}
 
+		//First, get the code production of each team
 		$req_list_teams = $bdd->query('SELECT * FROM teams WHERE game_id='.$list_games['id'].'');
 		while ($list_teams=$req_list_teams->fetch()){
 
@@ -103,23 +104,11 @@ while ($list_games=$req_list_games->fetch()){
 			$req_list_actions = $bdd->query('SELECT COUNT(*) as number_actions_code FROM actions WHERE game_id='.$list_games['id'].' AND team_id='.$list_teams['id'].' AND action="code" AND turn='.$list_games['current_turn'].'');
 			$number_actions_code=$req_list_actions->fetch();
 			$new_production['code'][$list_teams['id']] = $number_actions_code['number_actions_code']*$configuration['code_gain'];
-
-
-			//-------------------HACKING-----------------------------------
-			//When hacking successfully
-
-			//retrieving number of hacks to consider
-			$new_production['hack'][$list_teams['id']]=0;
-			$req_list_hacks = $bdd->query('SELECT COUNT(*) as count_hack_per_team, target_team_id FROM actions WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND blocked=0 AND team_id='.$list_teams['id'].' AND action="hack" GROUP BY target_team_id');
-			while($list_hacks=$req_list_hacks->fetch()){
-				//Hacking gain is minimum between default value and current production progress
-				$hacking_gain = min($teams[$list_hacks['target_team_id']]['production_progress'],$list_hacks['count_hack_per_team']*$configuration['hack_gain']);
-
-				//Hacking team gains production
-				$new_production['hack'][$list_teams['id']] += $hacking_gain;
-			}
-
-
+		}
+		
+		//Then, check the number of successful hacks against the team
+		$req_list_teams = $bdd->query('SELECT * FROM teams WHERE game_id='.$list_games['id'].'');
+		while ($list_teams=$req_list_teams->fetch()){
 			//--------------------HACKED--------------------------------
 			//When being hacked
 
@@ -128,10 +117,29 @@ while ($list_games=$req_list_games->fetch()){
 			$req_list_hacked = $bdd->query('SELECT COUNT(*) as count_hack FROM actions WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND blocked=0 AND target_team_id='.$list_teams['id'].' AND action="hack"');
 			$list_hacked = $req_list_hacked->fetch();
 
-			$hacking_loss = min($teams[$list_teams['id']]['production_progress'],$list_hacked['count_hack']*$configuration['code_loss']);
+			$hacking_loss = min($teams[$list_teams['id']]['production_progress']+$new_production['code'][$list_teams['id']],$list_hacked['count_hack']*$configuration['code_loss']);
 
 			$new_production['hacked'][$list_teams['id']] = $hacking_loss;
+			$new_production['nbr_hackers'][$list_teams['id']] = $list_hacked['count_hack'];
+		}
+		
+		//Then check all the other actions
+		$req_list_teams = $bdd->query('SELECT * FROM teams WHERE game_id='.$list_games['id'].'');
+		while ($list_teams=$req_list_teams->fetch()){
+			
+			//-------------------HACKING-----------------------------------
+			//When hacking successfully
 
+			//retrieving number of hacks to consider
+			$new_production['hack'][$list_teams['id']]=0;
+			$req_list_hacks = $bdd->query('SELECT COUNT(*) as count_hack_per_team, target_team_id FROM actions WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND blocked=0 AND team_id='.$list_teams['id'].' AND action="hack" GROUP BY target_team_id');
+			while($list_hacks=$req_list_hacks->fetch()){
+				//Hacking gain is minimum between default value and current production progress
+				$hacking_gain = min(($teams[$list_hacks['target_team_id']]['production_progress']+$new_production['code'][$list_hacks['target_team_id']])/$new_production['nbr_hackers'][$list_hacks['target_team_id']], $list_hacks['count_hack_per_team']*$configuration['hack_gain']);
+
+				//Hacking team gains production
+				$new_production['hack'][$list_teams['id']] += $hacking_gain;
+			}
 
 			//-------------------BLOCKING FIREWALL-----------------------------------
 			//When firewalling successfully
@@ -140,7 +148,7 @@ while ($list_games=$req_list_games->fetch()){
 			$new_production['blocking'][$list_teams['id']]=0;
 			$req_list_firewall = $bdd->query('SELECT COUNT(*) as count_firewall_per_team, team_id FROM actions WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND blocked=1 AND target_team_id='.$list_teams['id'].' AND action="hack" GROUP BY target_team_id');
 			while($list_firewall=$req_list_firewall->fetch()){
-				$blocking_gain = min($teams[$list_firewall['team_id']]['production_progress'], $list_firewall['count_firewall_per_team']*$configuration['firewall_gain']);
+				$blocking_gain = min($teams[$list_firewall['team_id']]['production_progress']+$new_production['code'][$list_firewall['team_id']]-$new_production['hacked'][$list_firewall['team_id']], $list_firewall['count_firewall_per_team']*$configuration['firewall_gain']);
 
 				$new_production['blocking'][$list_teams['id']] += $blocking_gain;
 			}
@@ -154,7 +162,7 @@ while ($list_games=$req_list_games->fetch()){
 			$req_list_blocked = $bdd->query('SELECT COUNT(*) as count_blocks FROM actions WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND blocked=1 AND team_id='.$list_teams['id'].' AND action="hack"');
 			$list_blocked = $req_list_blocked->fetch();
 
-			$blocked_loss = min($teams[$list_teams['id']]['production_progress'],$list_blocked['count_blocks']*$configuration['hack_loss']);
+			$blocked_loss = min($teams[$list_teams['id']]['production_progress']+$new_production['code'][$list_teams['id']]-$new_production['hacked'][$list_teams['id']],$list_blocked['count_blocks']*$configuration['hack_loss']);
 			$new_production['blocked'][$list_teams['id']] = $blocked_loss;
 
 			//---------------------SNITCHING--------------------------------
@@ -173,18 +181,12 @@ while ($list_games=$req_list_games->fetch()){
 					if($list_leaks['leak_risk']=="high")
 					{
 						$chance = 1/($configuration['snitch_high_chance']*$list_snitch['count_snitch'])-1;
-						if($chance < 0 )
-						{
-							$chance = 0;
-						}
+						if($chance < 0 ){$chance = 0;}
 					}
 					else
 					{
 						$chance = 1/($configuration['snitch_low_chance']*$list_snitch['count_snitch'])-1;
-						if($chance < 0 )
-						{
-							$chance = 0;
-						}
+						if($chance < 0 ){$chance = 0;}
 					}
 					if(rand(0,$chance)==0)
 					{
@@ -201,7 +203,7 @@ while ($list_games=$req_list_games->fetch()){
 
 			while($list_low_leak=$req_list_low_leak->fetch()){
 				//Leaking gain is minimum between default value and current production progress
-				$leaking_gain = min($teams[$list_low_leak['team_id']]['production_progress'],$list_low_leak['count_low_leak']*$configuration['leak_low']);
+				$leaking_gain = min($teams[$list_low_leak['team_id']]['production_progress']+$new_production['code'][$list_low_leak['team_id']]-$new_production['hacked'][$list_low_leak['team_id']],$list_low_leak['count_low_leak']*$configuration['leak_low']);
 
 				//Receiving leak team gains production
 				$new_production['leak'][$list_teams['id']] += $leaking_gain;
@@ -212,7 +214,7 @@ while ($list_games=$req_list_games->fetch()){
 
 			while($list_high_leak=$req_list_high_leak->fetch()){
 				//Leaking gain is minimum between default value and current production progress
-				$leaking_gain = min($teams[$list_high_leak['team_id']]['production_progress'],$list_high_leak['count_high_leak']*$configuration['leak_high']);
+				$leaking_gain = min($teams[$list_high_leak['team_id']]['production_progress']+$new_production['code'][$list_high_leak['team_id']]-$new_production['hacked'][$list_high_leak['team_id']],$list_high_leak['count_high_leak']*$configuration['leak_high']);
 
 				//Receiving leak team gains production
 				$new_production['leak'][$list_teams['id']] += $leaking_gain;

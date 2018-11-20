@@ -169,7 +169,7 @@ if (isset($_SESSION['user'])){
 			$reports_code=$req_reports_code->fetch();
 			if (!isset($reports_code['total_code'])){$reports_code['total_code']=0;}
 			
-			$req_reports_hack=$bdd->query('SELECT COUNT(*) as total_hack, SUM(blocked) as total_blocked,target_team_id FROM actions WHERE action="hack" AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND target_team_id='.$reports_actions['target_team_id'].' GROUP BY target_team_id');
+			$req_reports_hack=$bdd->query('SELECT COUNT(*) as total_hack, SUM(blocked) as total_blocked, target_team_id FROM actions WHERE action="hack" AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND team_id='.$reports_actions['team_id'].' AND target_team_id='.$reports_actions['target_team_id'].' GROUP BY target_team_id');
 			$reports_hack=$req_reports_hack->fetch();
 			if (is_null($reports_hack['total_blocked'])){$reports_hack['total_blocked']=0;}
 						

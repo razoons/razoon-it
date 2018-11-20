@@ -5,6 +5,7 @@ SNITCH & LEAK:
  - Add snitch.png, leak_low.png and leak_high.png in resources
 
 TO FIX:
+ [MEDIUM] Change the rules page to reflet the new snitch and leak actions
  [LOW] When lines of code = max (1000/1000) on Home, slider not totally filled
  [LOW] When game is over, actions can still be selected
 

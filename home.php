@@ -150,7 +150,7 @@ if (isset($_SESSION['user'])){
 			$reports=$req_reports->fetch();
 			$total= $reports['code']+$reports['hack']-$reports['hacked']+$reports['blocking']-$reports['blocked']+$reports['leak'];
 			?>
-	    <div class="result_team"><img src="./resources/graph.png"></div><span class="title_result"><?php if ($total>=0){ echo 'Your company produced '.$total.' lines of code</span>';}else{echo 'Your company lost '.abs($total).' lines of code</span>';}?>
+	    <div class="result_team"><img src="./resources/graph.png"></div><span class="title_result"><?php if ($total>=0){ echo 'Your company produced '.$total.' lines of code.</span>';}else{echo 'Your company lost '.abs($total).' lines of code.</span>';}?>
 			<br/><br/><?php }?><div id="chartContainer" style="height: 370px; width: 100%;"></div>
 		</section>
 	<?php
@@ -201,7 +201,7 @@ if (isset($_SESSION['user'])){
 			<?php }elseif ($reports_actions['action']=="snitch"){ ?>
 			<div class="result_team"><img src="./resources/snitch.png"></div><span class="title_result">You were <?php $num = $reports_snitch['total_snitch']; if($num == 1){echo "alone";} else{echo "{$num} users";}?> snitching (<?php $num = $reports_leak['total_leak_blocked']; echo $num; if($num == 1){echo " leak was";}else{echo " leaks were";}?> discovered).<br/>
 			<?php }elseif ($reports_actions['action']=="firewall"){ ?>
-				<div class="result_team"><img src="./resources/firewall.png"></div><span class="title_result">You were <?php $num = $reports_firewall['total_firewall']; if($num == 1){echo "alone";}else{echo "{$num} users";};?> protecting <b><?php echo $teams['team'][$reports_actions['team_id']];?></b>.<br/>    <?php echo $reports_blocked['total_hacks']-$reports_deal_2['total_blocked'];?> hacks were successful<br/> 
+				<div class="result_team"><img src="./resources/firewall.png"></div><span class="title_result">You were <?php $num = $reports_firewall['total_firewall']; if($num == 1){echo "alone";}else{echo "{$num} users";};?> protecting <b><?php echo $teams['team'][$reports_actions['team_id']];?></b>.<br/><?php $num = $reports_blocked['total_blocked']; echo $num; if($num==1){echo " hack";}else{echo " hacks";}?> prevented.<br/> 
 			<?php }}else{?>
 				<div class="result_team"><img src="./resources/nothing.png"></div><span class="title_result">You didn't take any action last turn.</span> <?php }?>
 

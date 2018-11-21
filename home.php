@@ -192,10 +192,10 @@ if (isset($_SESSION['user'])){
 
 				$list_users_snitched['user']=array();
 				$list_users_snitched['team_id']=array();
-				$req_reports_snitch=$bdd->query('SELECT user,leak_team_id FROM actions WHERE snitched=1 AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND team_id='.$actions['team_id'].'');
-				while ($reports_snitch=$req_reports_snitch->fetch()){
-					$list_users_snitched['user'][]=$reports_snitch['user'];
-					$list_users_snitched['team_id'][]=$reports_snitch['leak_team_id'];
+				$req_reports_leakers=$bdd->query('SELECT user,leak_team_id FROM actions WHERE snitched=1 AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND team_id='.$actions['team_id'].'');
+				while ($reports_leakers=$req_reports_leakers->fetch()){
+					$list_users_snitched['user'][]=$reports_leakers['user'];
+					$list_users_snitched['team_id'][]=$reports_leakers['leak_team_id'];
 				};
 
 
@@ -230,7 +230,7 @@ if (isset($_SESSION['user'])){
 				<br/><div class="result_team"><img src="./resources/leak.png"></div><span class="title_result">You leaked <?php if($actions['leak_risk']=="low"){echo "small";}else{echo "huge";}?> piece of code to <b><?php echo $teams['team'][$actions['leak_team_id']]; }?></b></span>
 				<?php for ($i=0;$i<count($list_users_snitched['user']);$i++){ ?>
 					<?php if ($list_users_snitched['user'][$i]!=$_SESSION['user']){ ?>
-						<br/><div class="result_team"><img src="./resources/leak.png"></div><span class="title_result"><?php echo $list_users_snitched['user'][$i];?> was caught leaking to <b><?php echo $teams['team'][$list_users_snitched['team_id'][$i]].'</b></span>'; }}
+						<br/><div class="result_team"><img src="./resources/leak.png"></div><span class="title_result"><?php echo $list_users_snitched['user'][$i];?> was caught leaking code to <b><?php echo $teams['team'][$list_users_snitched['team_id'][$i]].'</b></span>'; }}
 			}else{//no action for this user in DB?>
 				<div class="result_team"><img src="./resources/nothing.png"></div><span class="title_result">You didn't take any action last turn.</span> <?php
 			}?>

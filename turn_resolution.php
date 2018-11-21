@@ -135,7 +135,7 @@ while ($list_games=$req_list_games->fetch()){
 			$req_list_hacks = $bdd->query('SELECT COUNT(*) as count_hack_per_team, target_team_id FROM actions WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND blocked=0 AND team_id='.$list_teams['id'].' AND action="hack" GROUP BY target_team_id');
 			while($list_hacks=$req_list_hacks->fetch()){
 				//Hacking gain is minimum between default value and current production progress
-				$hacking_gain = min(($teams[$list_hacks['target_team_id']]['production_progress']+$new_production['code'][$list_hacks['target_team_id']])/$new_production['nbr_hackers'][$list_hacks['target_team_id']], $list_hacks['count_hack_per_team']*$configuration['hack_gain']);
+				$hacking_gain = min((($teams[$list_hacks['target_team_id']]['production_progress']+$new_production['code'][$list_hacks['target_team_id']])/$new_production['nbr_hackers'][$list_hacks['target_team_id']])*$list_hacks['count_hack_per_team'], $list_hacks['count_hack_per_team']*$configuration['hack_gain']);
 
 				//Hacking team gains production
 				$new_production['hack'][$list_teams['id']] += $hacking_gain;

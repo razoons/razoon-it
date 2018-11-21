@@ -57,7 +57,7 @@ if (isset($_SESSION['user'])){
 			$req_users=$bdd->query('SELECT COUNT(*) as user_nbr FROM users WHERE team_id="'.$list_teams['id'].'"');
 			$nbr_users_team=$req_users->fetch();
 		?>
-    
+
 		<section class="bdg-action-block-team">
 			<section class="bdg-action-team" style="background-color:#<?php echo $list_teams['color']; ?>; color:<?php echo $list_teams['font_color']; ?>;">
 				<section id="c7594">
@@ -74,47 +74,47 @@ if (isset($_SESSION['user'])){
 					</section>
 				</section>
 			</section>
-			
+
 			<?php if (isset($current_team['id'])){
 			if ($list_teams['id']==$current_team['id']){ ?>
-			
+
 			<div class="img_sprite" data-type="code" data-id=<?php echo $list_teams['id']; ?>>
 				<img class="sprite3 sprite" src="resources/code.png" <?php if ($action['action']=="code"){ echo 'data-selected="true"';}?>/>
 			</div>
 			<div class="helper">Your team produces +<?php echo $configuration['code_gain'];?> lines of code</div>
-			
+
 			<div class="img_sprite" data-type="firewall" data-id=<?php echo $list_teams['id']; ?>>
 				<img class="sprite3 sprite" src="resources/firewall.png" <?php if ($action['action']=="firewall"){ echo 'data-selected="true"';}?>/>
 			</div>
-			
+
 			<div class="helper">Blocks hacks directed to your team. <?php if($configuration['firewall_gain']<>0){echo "+".$configuration['firewall_gain']." lines of code if blocking";}?></div>
 			<div class="img_sprite" data-type="snitch" data-id=<?php echo $list_teams['id']; ?>>
 				<img class="sprite3 sprite" src="resources/snitch.png" <?php if ($action['action']=="snitch"){ echo 'data-selected="true"';}?>/>
 			</div>
 			<div class="helper">Tries to detect a leak from your team. <?php echo $configuration['snitch_low_chance']*100 . "% chance of detecting a low risk leak, " . $configuration['snitch_high_chance']*100 . "% chance for a high risk one." ?></div>
-			
+
 			<?php }else{ ?>
 			<div class="img_sprite" data-type="hack" data-id=<?php echo $list_teams['id']; ?>>
 				<img class="sprite3 sprite" src="resources/hack.png" <?php if (($action['action']=="hack") AND ($action['target_team_id']==$list_teams['id'])){ echo 'data-selected="true"';}?>/>
 			</div>
 			<div class="helper">If not blocked, your team produces +<?php echo $configuration['hack_gain'];?> lines of code</div>
-			
+
 			<div class="img_sprite" data-type="leak_low" data-id=<?php echo $list_teams['id']; ?>>
-				<img class="sprite3 sprite" src="resources/leak.png" <?php if (($action['leak_risk']=="low") AND ($action['leak_team_id']==$list_teams['id'])){ echo 'data-selected="true"';}?>/>
+				<img class="sprite3 sprite" src="resources/leak_low.png" <?php if (($action['leak_risk']=="low") AND ($action['leak_team_id']==$list_teams['id'])){ echo 'data-selected="true"';}?>/>
 			</div>
 			<div class="helper">If not snitched, you steal +<?php echo $configuration['leak_low'];?> lines of code from your team and send it to <?php echo $list_teams['team'];?></div>
-			
+
 			<div class="img_sprite" data-type="leak_high" data-id=<?php echo $list_teams['id']; ?>>
-				<img class="sprite3 sprite" src="resources/leak.png" <?php if (($action['leak_risk']=="high") AND ($action['leak_team_id']==$list_teams['id'])){ echo 'data-selected="true"';}?>/>
+				<img class="sprite3 sprite" src="resources/leak_high.png" <?php if (($action['leak_risk']=="high") AND ($action['leak_team_id']==$list_teams['id'])){ echo 'data-selected="true"';}?>/>
 			</div>
 			<div class="helper">If not snitched, you steal +<?php echo $configuration['leak_high'];?> lines of code from your team and send it to <?php echo $list_teams['team'];?></div>
-			
+
 			<form class="form" id="submit_action" action="submit_action.php" method="post">
 				<input type="hidden" id="action" name="action"/>
 				<input type="hidden" id="team" name="team"/>
 				<input type="hidden" id="leak" name="leak"/>
 			</form>
-			
+
 			<?php }}else{?>
 			<div class="img_sprite_admission" data-type="admission" data-id=<?php echo $list_teams['id']; ?>>
 				<?php if (in_array($list_teams['id'],$admissions)){?>
@@ -123,7 +123,7 @@ if (isset($_SESSION['user'])){
 					<img class="sprite2 sprite" src="resources/hire.png">
 				<?php } ?>
 			</div>
-			
+
 			<form class="form" id="initialize_admission" action="initialize_admission.php" method="post">
 				<input type="hidden" id="team" name="team"/>
 			</form>
@@ -131,7 +131,7 @@ if (isset($_SESSION['user'])){
 		</section>
 	<?php } ?>
 	</section>
-	
+
 	<script type="text/javascript">
 		<?php
 		if ($_SESSION['current_turn']==-1){?>
@@ -201,11 +201,11 @@ if (isset($_SESSION['user'])){
 		function action_click(obj){
 			if (obj.getAttribute("data-type")=="leak_low" || obj.getAttribute("data-type")=="leak_high"){
 				input_leak.value = 1;
-			}				
+			}
 			else{
 				input_leak.value = 0;
 			}
-			
+
 			if (obj.firstElementChild.getAttribute("data-selected")=="true"){
 				input_action.value="remove_action";
 			}else{

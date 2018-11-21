@@ -162,7 +162,7 @@ if (isset($_SESSION['user'])){
 		<?php
 			$req_actions=$bdd->query('SELECT * FROM actions WHERE user="'.$_SESSION['user'].'" AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.'');
 			$actions=$req_actions->fetch();
-			
+
 			if($actions){ //$actions==false if no actions in DB (user never clicked a button OR is sending admissions)
 				$req_reports = $bdd->query('SELECT * FROM reports WHERE game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND team_id='.$actions['team_id']);
 				$reports=$req_reports->fetch();
@@ -186,13 +186,20 @@ if (isset($_SESSION['user'])){
 				$reports_blocked=$req_reports_blocked->fetch();
 				if (is_null($reports_blocked['total_blocked'])){$reports_blocked['total_blocked']=0;}
 
-				$req_reports_snitch=$bdd->query('SELECT COUNT(*) as total_snitch FROM actions WHERE action="snitch" AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND target_team_id='.$actions['target_team_id'].'');
+        $req_reports_snitch=$bdd->query('SELECT COUNT(*) as total_snitch FROM actions WHERE action="snitch" AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND target_team_id='.$actions['target_team_id'].'');
 				$reports_snitch=$req_reports_snitch->fetch();
 				if (!isset($reports_snitch['total_snitch'])){$reports_snitch['total_snitch']=0;}
 
-				$req_reports_leak=$bdd->query('SELECT COUNT(*) as total_leak_blocked FROM actions WHERE snitched=1 AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND team_id='.$actions['team_id'].'');
-				$reports_leak=$req_reports_leak->fetch();
-				if (!isset($reports_leak['total_leak_blocked'])){$reports_leak['total_leak_blocked']=0;}
+				$list_users_snitched['user']=array();
+				$list_users_snitched['team_id']=array();
+				$req_reports_snitch=$bdd->query('SELECT user,leak_team_id FROM actions WHERE snitched=1 AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND team_id='.$actions['team_id'].'');
+				while ($reports_snitch=$req_reports_snitch->fetch()){
+					$list_users_snitched['user'][]=$reports_snitch['user'];
+					$list_users_snitched['team_id'][]=$reports_snitch['leak_team_id'];
+				};
+
+
+
 
 				if ($actions['action']=="code"){ ?>
 					<div class="result_team"><img src="./resources/code.png"></div><span class="title_result">You were <?php $num = $reports_code['total_code']; if($num == 1){echo "alone";}else{echo "{$num} users";}?> coding for your company.</span>
@@ -214,18 +221,20 @@ if (isset($_SESSION['user'])){
 					<?php } ?>
 					</span>
 				<?php }elseif ($actions['action']=="snitch"){ ?>
-				<div class="result_team"><img src="./resources/snitch.png"></div><span class="title_result">You were <?php $num = $reports_snitch['total_snitch']; if($num == 1){echo "alone";} else{echo "{$num} users";}?> snitching (<?php $num = $reports_leak['total_leak_blocked']; echo $num; if($num == 1){echo " leak was";}else{echo " leaks were";}?> discovered).<br/>
+				<div class="result_team"><img src="./resources/snitch.png"></div><span class="title_result">You were <?php $num = $reports_snitch['total_snitch']; if($num == 1){echo "alone";} else{echo $num." users";}?> snitching.</span><br/>
 				<?php }elseif ($actions['action']=="firewall"){ ?>
-					<div class="result_team"><img src="./resources/firewall.png"></div><span class="title_result">You were <?php $num = $reports_firewall['total_firewall']; if($num == 1){echo "alone";}else{echo "{$num} users";};?> protecting <b><?php echo $teams['team'][$actions['team_id']];?></b>.<br/><?php $num = $reports_blocked['total_blocked']; echo $num; if($num==1){echo " hack";}else{echo " hacks";}?> prevented (+<?php echo $reports['blocking'];?>) <br/>
+					<div class="result_team"><img src="./resources/firewall.png"></div><span class="title_result">You were <?php $num = $reports_firewall['total_firewall']; if($num == 1){echo "alone";}else{echo "{$num} users";};?> protecting <b><?php echo $teams['team'][$actions['team_id']];?></b>.<br/><?php $num = $reports_blocked['total_blocked']; echo $num; if($num==1){echo " hack";}else{echo " hacks";}?> prevented (+<?php echo $reports['blocking'];?>)</span> <br/>
 				<?php }}else{?>
 					<div class="result_team"><img src="./resources/nothing.png"></div><span class="title_result">You didn't take any action last turn.</span> <?php }?>
 				<?php if ($actions['leak_team_id']!=-1 and !is_null($actions['leak_team_id'])){ ?>
-				<br/><div class="result_team"><img src="./resources/leak.png"></div><span class="title_result">You leaked <?php if($actions['leak_risk']=="low"){echo "small";}else{echo "huge";}?> piece of code to <?php echo $teams['team'][$actions['leak_team_id']]; }
-			
+				<br/><div class="result_team"><img src="./resources/leak.png"></div><span class="title_result">You leaked <?php if($actions['leak_risk']=="low"){echo "small";}else{echo "huge";}?> piece of code to <b><?php echo $teams['team'][$actions['leak_team_id']]; }?></b></span>
+				<?php for ($i=0;$i<count($list_users_snitched['user']);$i++){ ?>
+					<?php if ($list_users_snitched['user'][$i]!=$_SESSION['user']){ ?>
+						<br/><div class="result_team"><img src="./resources/leak.png"></div><span class="title_result"><?php echo $list_users_snitched['user'][$i];?> was caught leaking to <b><?php echo $teams['team'][$list_users_snitched['team_id'][$i]].'</b></span>'; }}
 			}else{//no action for this user in DB?>
 				<div class="result_team"><img src="./resources/nothing.png"></div><span class="title_result">You didn't take any action last turn.</span> <?php
 			}?>
-			
+
 	  </section>
 	<?php }?>
   <script type="text/javascript">

@@ -163,7 +163,7 @@ if (isset($_SESSION['user'])){
 			$req_actions=$bdd->query('SELECT * FROM actions WHERE user="'.$_SESSION['user'].'" AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.'');
 			$actions=$req_actions->fetch();
 
-			$req_reports = $bdd->query('SELECT * FROM reports WHERE game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND team_id='.$_SESSION['team_id']);
+			$req_reports = $bdd->query('SELECT * FROM reports WHERE game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND team_id='.$actions['team_id']);
 			$reports=$req_reports->fetch();
 
 			if(isset($actions['id']) and !is_null($actions['id'])){

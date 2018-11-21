@@ -166,8 +166,7 @@ if (isset($_SESSION['user'])){
 			$req_reports = $bdd->query('SELECT * FROM reports WHERE game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND team_id='.$_SESSION['team_id']);
 			$reports=$req_reports->fetch();
 
-			if(isset($actions['id'])){
-
+			if(isset($actions['id']) and !is_null($actions['id'])){
 			$req_configuration = $bdd->query('SELECT * FROM configuration');
 			$configuration=$req_configuration->fetch();
 
@@ -219,7 +218,7 @@ if (isset($_SESSION['user'])){
 				<div class="result_team"><img src="./resources/firewall.png"></div><span class="title_result">You were <?php $num = $reports_firewall['total_firewall']; if($num == 1){echo "alone";}else{echo "{$num} users";};?> protecting <b><?php echo $teams['team'][$actions['team_id']];?></b>.<br/><?php $num = $reports_blocked['total_blocked']; echo $num; if($num==1){echo " hack";}else{echo " hacks";}?> prevented (+<?php echo $reports['blocking'];?>) <br/>
 			<?php }}else{?>
 				<div class="result_team"><img src="./resources/nothing.png"></div><span class="title_result">You didn't take any action last turn.</span> <?php }?>
-			<?php if ($actions['leak_team_id']!=-1){ ?>
+			<?php if ($actions['leak_team_id']!=-1 and !is_null($actions['leak_team_id'])){ ?>
 			<br/><div class="result_team"><img src="./resources/leak.png"></div><span class="title_result">You leaked <?php if($actions['leak_risk']=="low"){echo "small";}else{echo "huge";}?> piece of code to <?php echo $teams['team'][$actions['leak_team_id']]; }?>
 
 	  </section>

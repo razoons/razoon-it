@@ -108,13 +108,7 @@ if (isset($_SESSION['user'])){
 				<img class="sprite3 sprite" src="resources/leak_high.png" <?php if (($action['leak_risk']=="high") AND ($action['leak_team_id']==$list_teams['id'])){ echo 'data-selected="true"';}?>/>
 			</div>
 			<div class="helper">If not snitched, you steal +<?php echo $configuration['leak_high'];?> lines of code from your team and send it to <?php echo $list_teams['team'];?></div>
-
-			<form class="form" id="submit_action" action="submit_action.php" method="post">
-				<input type="hidden" id="action" name="action"/>
-				<input type="hidden" id="team" name="team"/>
-				<input type="hidden" id="leak" name="leak"/>
-			</form>
-
+			
 			<?php }}else{?>
 			<div class="img_sprite_admission" data-type="admission" data-id=<?php echo $list_teams['id']; ?>>
 				<?php if (in_array($list_teams['id'],$admissions)){?>
@@ -123,13 +117,28 @@ if (isset($_SESSION['user'])){
 					<img class="sprite2 sprite" src="resources/hire.png">
 				<?php } ?>
 			</div>
-
-			<form class="form" id="initialize_admission" action="initialize_admission.php" method="post">
-				<input type="hidden" id="team" name="team"/>
-			</form>
 			<?php }?>
 		</section>
-	<?php } ?>
+	<?php }
+	if(isset($current_team['id']))
+	{ ?>
+		<center>
+		<form class="form" id="submit_action" action="submit_action.php" method="post">
+			<input type="hidden" id="action" name="action"/>
+			<input type="hidden" id="team" name="team"/>
+			<input type="hidden" id="leak" name="leak"/>
+			<input type="hidden" id="leak_team" name="leak_team"/>
+			<button id="button_submit_action"><img src="resources/hire_ok.png"></button>
+		</form>
+	</center>
+	<?php }else{ ?>
+		<center>
+		<form class="form" id="initialize_admission" action="initialize_admission.php" method="post">
+			<input type="hidden" id="team" name="team"/>
+			<!-- <button id="button_submit_action"><img src="resources/hire_ok.png"></button> -->
+		</form>
+		</center>
+	<?php } ?>	
 	</section>
 
 	<script type="text/javascript">
@@ -147,13 +156,13 @@ if (isset($_SESSION['user'])){
 
 		var sprites3=document.querySelectorAll('.sprite3');
 		var sprites2=document.querySelectorAll('.sprite2');
-		var selected=document.querySelectorAll('.selected');
 		var img_sprite=document.querySelectorAll('.img_sprite');
 		var helper=document.querySelectorAll('.helper');
 		var img_sprite_admission=document.querySelectorAll('.img_sprite_admission');
 		var input_action=document.getElementById('action');
 		var input_team=document.getElementById('team');
-		var input_leak = document.getElementById('leak'); //is the button pushed a leak action ?
+		var input_leak = document.getElementById('leak');
+		var input_leak_team = document.getElementById('leak_team');
 
 		for (i=0;i<img_sprite.length;i++){
 			img_sprite[i].addEventListener('click', action_click.bind(null,img_sprite[i]));
@@ -198,21 +207,68 @@ if (isset($_SESSION['user'])){
 			obj.style.top="-"+delta+"px";
 		}
 
+		function unselectOther(obj){
+			for(i=0; i<img_sprite.length; i++){
+				if(img_sprite[i] != obj){
+					var dataType = obj.getAttribute("data-type");
+					if(dataType == "leak_low" || dataType == "leak_high"){
+						dataType = img_sprite[i].getAttribute("data-type");
+						if(dataType == "leak_low" || dataType == "leak_high"){
+							img_sprite[i].firstElementChild.setAttribute("data-selected", false);
+						}
+					}
+					else{
+						dataType = img_sprite[i].getAttribute("data-type");
+						if(dataType != "leak_low" && dataType != "leak_high"){
+							img_sprite[i].firstElementChild.setAttribute("data-selected", false);
+						}
+					}
+					spriteUpdate(img_sprite[i].firstElementChild);
+				}
+			}
+		}
+		
 		function action_click(obj){
-			if (obj.getAttribute("data-type")=="leak_low" || obj.getAttribute("data-type")=="leak_high"){
-				input_leak.value = 1;
-			}
-			else{
-				input_leak.value = 0;
-			}
+			unselectOther(obj);
 
 			if (obj.firstElementChild.getAttribute("data-selected")=="true"){
-				input_action.value="remove_action";
+				obj.firstElementChild.setAttribute("data-selected", false);
 			}else{
-				input_action.value=obj.getAttribute("data-type");
+				obj.firstElementChild.setAttribute("data-selected", true);
 			}
-			input_team.value=obj.getAttribute("data-id");
-			document.getElementById("submit_action").submit();
+			
+			var selected = document.querySelectorAll('[data-selected=true]');
+			input_leak.value = "";
+			input_leak_team.value = -1;
+			input_team.value = -1;
+			input_action.value = "";
+			
+			for(i=0; i<selected.length; i++)
+			{
+				var element = selected[i].parentElement;
+				console.log(element);
+				if(element.getAttribute("data-type")=="leak_low")
+				{
+					input_leak.value = "low";
+					input_leak_team.value = element.getAttribute("data-id");
+				}
+				else if (element.getAttribute("data-type")=="leak_high")
+				{
+					input_leak.value = "high";
+					input_leak_team.value = element.getAttribute("data-id");
+				}
+				else
+				{
+					input_team.value = element.getAttribute("data-id");
+					input_action.value = element.getAttribute("data-type");
+				}
+			}
+			console.log(input_action.value);
+			console.log(input_team.value);
+			console.log(input_leak.value);
+			console.log(input_leak_team.value);
+			
+			//document.getElementById("submit_action").submit();
 		}
 
 		function admission_click(obj){
@@ -220,6 +276,27 @@ if (isset($_SESSION['user'])){
 			document.getElementById("initialize_admission").submit();
 		}
 
+		function spriteUpdate(obj){
+			if(obj.getAttribute("class") =="sprite3 sprite")
+			{
+				if (obj.getAttribute("data-selected")=="true"){
+					new_position=(obj.height)/3;
+				}
+				else{
+					new_position=0;
+				}
+			}
+			else if(obj.getAttribute("class") =="sprite2 sprite"){
+				if (obj.getAttribute("data-selected")=="true"){
+					new_position=(obj.height)/2;
+				}
+				else{
+					new_position=0;
+				}
+			}
+			obj.style.top="-"+new_position+"px";
+		}
+		
 		window.onload = function () {
 			for (i=0;i<sprites3.length;i++){
 				sprites3[i].addEventListener('mouseover', sprite_over3.bind(null,sprites3[i]));

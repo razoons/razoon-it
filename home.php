@@ -186,7 +186,7 @@ if (isset($_SESSION['user'])){
 				$reports_blocked=$req_reports_blocked->fetch();
 				if (is_null($reports_blocked['total_blocked'])){$reports_blocked['total_blocked']=0;}
 
-        $req_reports_snitch=$bdd->query('SELECT COUNT(*) as total_snitch FROM actions WHERE action="snitch" AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND target_team_id='.$actions['target_team_id'].'');
+				$req_reports_snitch=$bdd->query('SELECT COUNT(*) as total_snitch FROM actions WHERE action="snitch" AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.' AND target_team_id='.$actions['target_team_id'].'');
 				$reports_snitch=$req_reports_snitch->fetch();
 				if (!isset($reports_snitch['total_snitch'])){$reports_snitch['total_snitch']=0;}
 
@@ -199,22 +199,20 @@ if (isset($_SESSION['user'])){
 				};
 
 
-
-
 				if ($actions['action']=="code"){ ?>
 					<div class="result_team"><img src="./resources/code.png"></div><span class="title_result">You were <?php $num = $reports_code['total_code']; if($num == 1){echo "alone";}else{echo "{$num} users";}?> coding for your company.</span>
 				<?php }elseif ($actions['action']=="hack"){?>
 				<div class="result_team"><img src="./resources/hack.png"></div><span class="title_result">You were <?php $num = $reports_hack['total_hack']; if($num == 1){echo "alone";}else{echo "{$num} users";}?> hacking <b><?php echo $teams['team'][$reports_hack['target_team_id']];?></b> (<?php $num = $reports_hack['total_blocked']; echo $num; if($num == 1){echo " was";}else{echo " were";};?> blocked).<br/>
 					<?php
 					if($actions['blocked']==0){
-						if($reports['hack']==$configuration['hack_gain']){
-							?><span class="good">Your hack was totally successful (+<?php echo $reports['hack'];?>).</span><?php
+						if($reports['hack']==$configuration['hack_gain']* $reports_hack['total_hack']){
+							?><span class="good">Your hack was totally successful (+<?php echo $configuration['hack_gain'];?>).</span><?php
 						}
 						elseif($reports['hack']==0){
 							?><span class="bad">Your hack was successful but didn't steal anything (+0).</span><?php
 						}
 						else{
-							?><span class="good">Your hack was successful but didn't steal as much as hoped (+<?php echo $reports['hack'];?>).</span><?php
+							?><span class="good">Your hack was successful but didn't steal as much as hoped (+<?php echo round($reports['hack']/$reports_hack['total_hack']);?>).</span><?php
 						}
 					}else{?>
 						<span class="bad">Your hack was blocked.</span>
@@ -227,10 +225,11 @@ if (isset($_SESSION['user'])){
 				<?php }}else{?>
 					<div class="result_team"><img src="./resources/nothing.png"></div><span class="title_result">You didn't take any action last turn.</span> <?php }?>
 				<?php if ($actions['leak_team_id']!=-1 and !is_null($actions['leak_team_id'])){ ?>
-				<br/><div class="result_team"><img src="./resources/leak.png"></div><span class="title_result">You leaked <?php if($actions['leak_risk']=="low"){echo "small";}else{echo "huge";}?> piece of code to <b><?php echo $teams['team'][$actions['leak_team_id']]; }?></b></span>
+				<br/><div class="result_team"><img src="./resources/leak.png"></div><span class="title_result">You leaked a <?php if($actions['leak_risk']=="low"){echo "small";}else{echo "huge";}?> piece of code to <b><?php echo $teams['team'][$actions['leak_team_id']];}?></b>.</span>
 				<?php for ($i=0;$i<count($list_users_snitched['user']);$i++){ ?>
 					<?php if ($list_users_snitched['user'][$i]!=$_SESSION['user']){ ?>
 						<br/><div class="result_team"><img src="./resources/leak.png"></div><span class="title_result"><?php echo $list_users_snitched['user'][$i];?> was caught leaking code to <b><?php echo $teams['team'][$list_users_snitched['team_id'][$i]].'</b></span>'; }}
+			
 			}else{//no action for this user in DB?>
 				<div class="result_team"><img src="./resources/nothing.png"></div><span class="title_result">You didn't take any action last turn.</span> <?php
 			}?>

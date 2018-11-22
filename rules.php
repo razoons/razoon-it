@@ -44,21 +44,29 @@ session_start();
 	The game is split in x turns. Each turn starts at midnight and ends 24 hours later. The game is in pause during the weekend (the turn starting on Friday morning ends on Sunday night).
 	<br/>During a turn, each user can take one of the 4 different actions:
 	<br/><br/><div><div class="result_team"><img src="./resources/code.png"></div><div class="explain_1"><b>Code:</b> This action allows the user to code an amount of lines for his/her company.</div></div>
-	<br/><div><div class="result_team"><img src="./resources/firewall.png"></div><div class="explain_1"><b>Firewall:</b> This action allows the user to protect his company from attacks (hacks or deals). If his/her firewall blocks an attack, his/her company will gain some lines of code.
+	<br/><div><div class="result_team"><img src="./resources/firewall.png"></div><div class="explain_1"><b>Firewall:</b> This action allows the user to protect his company from external hacks. If his/her firewall blocks a hack, his/her company will steal some lines of code from the hack company.
 	<br/>A firewall is only effective during one turn, even if it didn't block any attack. It can't block more than 1 attack.</div></div>
-	<br/><div><div class="result_team"><img src="./resources/hack.png"></div><div class="explain_1"><b>Hack:</b> This action allows the user to hack another company. If the hack is blocked by a firewall, it has no effect but if it's not, his/her company will gain some lines of code.</div></div>
-	<br/><div><div class="result_team"><img src="./resources/deal.png"></div><div class="explain_1"><b>Deal:</b> This action allows the user to deal with another company. If the deal is blocked, it has no effect but if it's not blocked, the user steals some lines of code from his/her company and give it to another company.</div></div>
+	<br/><div><div class="result_team"><img src="./resources/hack.png"></div><div class="explain_1"><b>Hack:</b> This action allows the user to hack another company. If the hack is successful, his/her company will steal some lines of code from the other company. If blocked, refer to the firewall definition</div></div>
+	<br/><div><div class="result_team"><img src="./resources/snitch.png"></div><div class="explain_1"><b>Snitch:</b> This action allows the user to spy on activities occuring in his/her company. If a user is leaking code to another company, the snitcher has a probability of caughting him/her. It's a 50% chance for low risk leak, but a 100% chance of caughting him/her for a high risk leak.<br/>If a user is discovered, his/her name will be communicated to the rest of the company.</div></div>
 	<br/> The firewalls blocks attacks in this order:
 	<ol>
 	<li> Minor hacks (small number of hacks coming from the same company)</li>
 	<li> Massive hacks (large number of hacks coming from the same company)</li>
-	<li> Deals (hacks coming from the attacked company itself)</li>
 	</ol>
-	
+
 	<br/><br/><b>Particularities:</b>
-	<br/>When hacking or dealing a team, a user can not get more than what the team currently has.
-	<br/>During the actions resolution, hacks and deals will always be processed before the coding.
-	
+	<br/>When hacking successfuly a team or when blocking a hack, a user can not get more than what the team currently has.
+  <br/>Note that it is possible to steal from a company the on-going code.
+
+
+</section>
+<section class="bdg-sect-header">
+<h1>Complementary Actions</h1>
+</section>
+<section class="bdg-sect">
+	On top of the 4 actions described above, any user can leak code to another company. There are two types of leak:
+	<br/><br/><div><div class="result_team"><img src="./resources/leak_low.png"></div><div class="explain_1"><b>Low risk leak:</b> This action allows the user to give a small piece of code to another company without stealing it. In case of snitch, the risk to get caught is 50%. In that case, the name of the user is communicated to the entire company.</div></div>
+  <br/><br/><div><div class="result_team"><img src="./resources/leak_high.png"></div><div class="explain_1"><b>High risk leak:</b> This action allows the user to give a huge piece of code to another company without stealing it. In case of snitch, the risk to get caught is 100%. In that case, the name of the user is communicated to the entire company.</div></div>
 	
 </section>
 <section class="bdg-sect-header">

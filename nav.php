@@ -24,7 +24,6 @@ $list_admissions=$req_list_admissions->fetch();
           <div class="notif"></div>
         <?php }?>Admissions</a>
         <a href="configuration.php" class="navbar-menu-link">Configuration</a>
-        <a href="rules.php" class="navbar-menu-link">Rules</a>
         <a href="logout.php" class="navbar-menu-link">Log out</a>
       </nav>
     </div>

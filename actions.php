@@ -97,7 +97,7 @@ if (isset($_SESSION['user'])){
 			<div class="img_sprite" data-type="hack" data-id=<?php echo $list_teams['id']; ?>>
 				<img class="sprite3 sprite" src="resources/hack.png" <?php if (($action['action']=="hack") AND ($action['target_team_id']==$list_teams['id'])){ echo 'data-selected="true"';}?>/>
 			</div>
-			<div class="helper">If not blocked, your team gains +<?php echo $configuration['hack_gain'];?> lines of code.<?php if($configuration['code_loss']<>0){echo "-".$configuration['code_loss']." lines of codes for ".$list_teams['team']."."?></div>
+			<div class="helper">If not blocked, your team gains +<?php echo $configuration['hack_gain'];?> lines of code.<?php if($configuration['code_loss']<>0){echo "-".$configuration['code_loss']." lines of codes for ".$list_teams['team'].".";}?></div>
 
 			<div class="img_sprite" data-type="leak_low" data-id=<?php echo $list_teams['id']; ?>>
 				<img class="sprite3 sprite" src="resources/leak_low.png" <?php if (($action['leak_risk']=="low") AND ($action['leak_team_id']==$list_teams['id'])){ echo 'data-selected="true"';}?>/>

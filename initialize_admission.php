@@ -15,8 +15,11 @@ $current_game=$req->fetch();
 $req=$bdd->query('SELECT * FROM teams WHERE id="'.$_SESSION['team_id'].'"');
 $current_team=$req->fetch();
 
+//Check if team_admission has been set
+$team_admission = isset($_POST['team_admission']) ? $_POST['team_admission'] : "";
+
 $insert_admission=$bdd->prepare('INSERT INTO admissions(game_id,turn,team_id,target_user,voter_user,vote_result) VALUES (:game_id,:turn,:team_id,:target_user,:voter_user,:vote_result)');
-$array = explode(',', $_POST['team_admission']); //create an array by separating string
+$array = explode(',', $team_admission); //create an array by separating string
 
 foreach ($array as $value) {
 	$req=$bdd->query('SELECT * FROM users WHERE team_id="'.$value.'"');

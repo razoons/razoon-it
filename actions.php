@@ -128,14 +128,14 @@ if (isset($_SESSION['user'])){
 			<input type="hidden" id="team" name="team"/>
 			<input type="hidden" id="leak" name="leak"/>
 			<input type="hidden" id="leak_team" name="leak_team"/>
-			<button id="button_submit_action"><img src="resources/hire_ok.png"></button>
+			<button id="button_submit_action"><img src="resources/submit_button.png"></button>
 		</form>
 	</center>
 	<?php }else{ ?>
 		<center>
 		<form class="form" id="initialize_admission" action="initialize_admission.php" method="post">
 			<input type="hidden" id="team_admission" name="team_admission"/>
-			<button id="button_submit_admission"><img src="resources/hire_ok.png"></button>
+			<button id="button_submit_admission"><img src="resources/submit_button.png"></button>
 		</form>
 		</center>
 	<?php } ?>

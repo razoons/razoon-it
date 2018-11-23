@@ -5,5 +5,5 @@ TO FIX:
  [LOW] When game is over, actions can still be selected
  [MEDIUM] When the screen width is small (mobile) the menu does not appear anymore. It actually doesn't occur always so might be linked to the name of the company or something else.
  [LOW] The graph is not going higher than the objective.
- [MEDIUM] "SEND" button image needs to be done (.png)
+ [LOW] Team A = a1 & a2. b and c are excluded. They both send admissions to Team A. a1 and a2 accept b but don't respond to c's admission. Next turn, a1 and a2 will be able to vote for c's admission from last turn. But b won't be able to vote. 
  

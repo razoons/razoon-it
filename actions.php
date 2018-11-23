@@ -128,14 +128,14 @@ if (isset($_SESSION['user'])){
 			<input type="hidden" id="team" name="team"/>
 			<input type="hidden" id="leak" name="leak"/>
 			<input type="hidden" id="leak_team" name="leak_team"/>
-			<button id="button_submit_action"><img src="resources/submit_button.png"></button>
+			<button id="button_submit_action" class="button">Submit action</button>
 		</form>
 	</center>
 	<?php }else{ ?>
 		<center>
 		<form class="form" id="initialize_admission" action="initialize_admission.php" method="post">
 			<input type="hidden" id="team_admission" name="team_admission"/>
-			<button id="button_submit_admission"><img src="resources/submit_button.png"></button>
+			<button id="button_submit_admission" class="button">Submit admission</button>
 		</form>
 		</center>
 	<?php } ?>
@@ -185,11 +185,11 @@ if (isset($_SESSION['user'])){
 				delta=(obj.height)/3;
 			}
 			obj.style.top="-"+delta+"px";
-			
+
 			if(obj.parentElement.getAttribute("class") == "img_sprite"){
 				obj.parentElement.nextElementSibling.style.display="block";
 			}
-			
+
 		}
 
 		function sprite_out3(obj){
@@ -199,11 +199,11 @@ if (isset($_SESSION['user'])){
 				delta=0;
 			}
 			obj.style.top="-"+delta+"px";
-			
+
 			if(obj.parentElement.getAttribute("class") == "img_sprite"){
 				obj.parentElement.nextElementSibling.style.display="none";
 			}
-			
+
 		}
 
 		function sprite_over2(obj){
@@ -280,12 +280,12 @@ if (isset($_SESSION['user'])){
 			}else{
 				obj.firstElementChild.setAttribute("data-selected", true);
 			}
-			
+
 			var selected = document.querySelectorAll('[data-selected=true]');
-			
+
 			input_admission.value = [];
 			var admin = [];
-			
+
 			for(i=0; i<selected.length; i++)
 			{
 				if(selected[i].getAttribute("class") == "sprite3 sprite")

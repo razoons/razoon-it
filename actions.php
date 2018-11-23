@@ -114,7 +114,7 @@ if (isset($_SESSION['user'])){
 				<?php if (in_array($list_teams['id'],$admissions)){?>
 					<img class="sprite" src="resources/hire_ok.png" data-selected="true">
 				<?php }else{?>
-					<img class="sprite2 sprite" src="resources/hire.png">
+					<img class="sprite3 sprite" src="resources/hire.png" data-selected="false">
 				<?php } ?>
 			</div>
 			<?php }?>
@@ -134,8 +134,8 @@ if (isset($_SESSION['user'])){
 	<?php }else{ ?>
 		<center>
 		<form class="form" id="initialize_admission" action="initialize_admission.php" method="post">
-			<input type="hidden" id="team" name="team"/>
-			<!-- <button id="button_submit_action"><img src="resources/hire_ok.png"></button> -->
+			<input type="hidden" id="team_admission" name="team_admission"/>
+			<button id="button_submit_admission"><img src="resources/hire_ok.png"></button>
 		</form>
 		</center>
 	<?php } ?>	
@@ -163,6 +163,7 @@ if (isset($_SESSION['user'])){
 		var input_team=document.getElementById('team');
 		var input_leak = document.getElementById('leak');
 		var input_leak_team = document.getElementById('leak_team');
+		var input_admission = document.getElementById('team_admission');
 
 		for (i=0;i<img_sprite.length;i++){
 			img_sprite[i].addEventListener('click', action_click.bind(null,img_sprite[i]));
@@ -184,7 +185,10 @@ if (isset($_SESSION['user'])){
 				delta=(obj.height)/3;
 			}
 			obj.style.top="-"+delta+"px";
-			obj.parentElement.nextElementSibling.style.display="block";
+			if(obj.class == "img_sprite"){
+				obj.parentElement.nextElementSibling.style.display="block";
+			}
+			
 		}
 
 		function sprite_out3(obj){
@@ -194,7 +198,11 @@ if (isset($_SESSION['user'])){
 				delta=0;
 			}
 			obj.style.top="-"+delta+"px";
-			obj.parentElement.nextElementSibling.style.display="none";
+			
+			if(obj.class == "img_sprite"){
+				obj.parentElement.nextElementSibling.style.display="none";
+			}
+			
 		}
 
 		function sprite_over2(obj){
@@ -246,7 +254,7 @@ if (isset($_SESSION['user'])){
 			for(i=0; i<selected.length; i++)
 			{
 				var element = selected[i].parentElement;
-				console.log(element);
+
 				if(element.getAttribute("data-type")=="leak_low")
 				{
 					input_leak.value = "low";
@@ -263,20 +271,32 @@ if (isset($_SESSION['user'])){
 					input_action.value = element.getAttribute("data-type");
 				}
 			}
-			console.log(input_action.value);
-			console.log(input_team.value);
-			console.log(input_leak.value);
-			console.log(input_leak_team.value);
-			
-			//document.getElementById("submit_action").submit();
 		}
 
 		function admission_click(obj){
-			input_team.value=obj.getAttribute("data-id");
-			document.getElementById("initialize_admission").submit();
+			if (obj.firstElementChild.getAttribute("data-selected")=="true"){
+				obj.firstElementChild.setAttribute("data-selected", false);
+			}else{
+				obj.firstElementChild.setAttribute("data-selected", true);
+			}
+			
+			var selected = document.querySelectorAll('[data-selected=true]');
+			
+			input_admission.value = [];
+			var admin = [];
+			
+			for(i=0; i<selected.length; i++)
+			{
+				if(selected[i].getAttribute("class") == "sprite3 sprite")
+				{
+					admin.push(selected[i].parentElement.getAttribute("data-id"));
+				}
+			}
+			input_admission.value = admin.toString();
 		}
 
 		function spriteUpdate(obj){
+			var new_position = 0;
 			if(obj.getAttribute("class") =="sprite3 sprite")
 			{
 				if (obj.getAttribute("data-selected")=="true"){

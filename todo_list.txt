@@ -6,5 +6,4 @@ TO FIX:
  [MEDIUM] When the screen width is small (mobile) the menu does not appear anymore. It actually doesn't occur always so might be linked to the name of the company or something else.
  [LOW] The graph is not going higher than the objective.
  [MEDIUM] "SEND" button image needs to be done (.png)
- [MEDIUM] "send" button not done for admissions
  

@@ -185,11 +185,11 @@ if (isset($_SESSION['user'])){
 				delta=(obj.height)/3;
 			}
 			obj.style.top="-"+delta+"px";
-			
+
 			if(obj.parentElement.getAttribute("class") == "img_sprite"){
 				obj.parentElement.nextElementSibling.style.display="block";
 			}
-			
+
 		}
 
 		function sprite_out3(obj){
@@ -199,11 +199,11 @@ if (isset($_SESSION['user'])){
 				delta=0;
 			}
 			obj.style.top="-"+delta+"px";
-			
+
 			if(obj.parentElement.getAttribute("class") == "img_sprite"){
 				obj.parentElement.nextElementSibling.style.display="none";
 			}
-			
+
 		}
 
 		function sprite_over2(obj){
@@ -280,12 +280,12 @@ if (isset($_SESSION['user'])){
 			}else{
 				obj.firstElementChild.setAttribute("data-selected", true);
 			}
-			
+
 			var selected = document.querySelectorAll('[data-selected=true]');
-			
+
 			input_admission.value = [];
 			var admin = [];
-			
+
 			for(i=0; i<selected.length; i++)
 			{
 				if(selected[i].getAttribute("class") == "sprite3 sprite")

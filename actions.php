@@ -87,7 +87,7 @@ if (isset($_SESSION['user'])){
 				<img class="sprite3 sprite" src="resources/firewall.png" <?php if ($action['action']=="firewall"){ echo 'data-selected="true"';}?>/>
 			</div>
 
-			<div class="helper">Blocks hacks directed to your team. <?php if($configuration['firewall_gain']<>0){echo "+".$configuration['firewall_gain']." lines of code if blocking.";} if($configuration['hack_loss']<>0){echo "-".$configuration['hack_loss']." lines of code for".$list_teams['team'].".";}?></div>
+			<div class="helper">Blocks hacks directed to your team. <?php if($configuration['firewall_gain']<>0){echo "+".$configuration['firewall_gain']." lines of code if blocking. ";} if($configuration['hack_loss']<>0){echo "-".$configuration['hack_loss']." lines of code for the hacking company.";}?></div>
 			<div class="img_sprite" data-type="snitch" data-id=<?php echo $list_teams['id']; ?>>
 				<img class="sprite3 sprite" src="resources/snitch.png" <?php if ($action['action']=="snitch"){ echo 'data-selected="true"';}?>/>
 			</div>
@@ -97,17 +97,17 @@ if (isset($_SESSION['user'])){
 			<div class="img_sprite" data-type="hack" data-id=<?php echo $list_teams['id']; ?>>
 				<img class="sprite3 sprite" src="resources/hack.png" <?php if (($action['action']=="hack") AND ($action['target_team_id']==$list_teams['id'])){ echo 'data-selected="true"';}?>/>
 			</div>
-			<div class="helper">If not blocked, your team gains +<?php echo $configuration['hack_gain'];?> lines of code.<?php if($configuration['code_loss']<>0){echo "-".$configuration['code_loss']." lines of codes for ".$list_teams['team'].".";}?></div>
+			<div class="helper">If not blocked, your team gains +<?php echo $configuration['hack_gain'];?> lines of code. <?php if($configuration['code_loss']<>0){echo "-".$configuration['code_loss']." lines of codes for ".$list_teams['team'].".";}?></div>
 
 			<div class="img_sprite" data-type="leak_low" data-id=<?php echo $list_teams['id']; ?>>
 				<img class="sprite3 sprite" src="resources/leak_low.png" <?php if (($action['leak_risk']=="low") AND ($action['leak_team_id']==$list_teams['id'])){ echo 'data-selected="true"';}?>/>
 			</div>
-			<div class="helper">You give +<?php echo $configuration['leak_low'];?> lines of code from your team and send it to <?php echo $list_teams['team'];?></div>
+			<div class="helper">You give +<?php echo $configuration['leak_low'];?> lines of code from your team and send it to <?php echo $list_teams['team'];?>.</div>
 
 			<div class="img_sprite" data-type="leak_high" data-id=<?php echo $list_teams['id']; ?>>
 				<img class="sprite3 sprite" src="resources/leak_high.png" <?php if (($action['leak_risk']=="high") AND ($action['leak_team_id']==$list_teams['id'])){ echo 'data-selected="true"';}?>/>
 			</div>
-			<div class="helper">You give +<?php echo $configuration['leak_high'];?> lines of code from your team and send it to <?php echo $list_teams['team'];?></div>
+			<div class="helper">You give +<?php echo $configuration['leak_high'];?> lines of code from your team and send it to <?php echo $list_teams['team'];?>.</div>
 
 			<?php }}else{?>
 			<div class="img_sprite_admission" data-type="admission" data-id=<?php echo $list_teams['id']; ?>>
@@ -185,7 +185,8 @@ if (isset($_SESSION['user'])){
 				delta=(obj.height)/3;
 			}
 			obj.style.top="-"+delta+"px";
-			if(obj.class == "img_sprite"){
+			
+			if(obj.parentElement.getAttribute("class") == "img_sprite"){
 				obj.parentElement.nextElementSibling.style.display="block";
 			}
 			
@@ -199,7 +200,7 @@ if (isset($_SESSION['user'])){
 			}
 			obj.style.top="-"+delta+"px";
 			
-			if(obj.class == "img_sprite"){
+			if(obj.parentElement.getAttribute("class") == "img_sprite"){
 				obj.parentElement.nextElementSibling.style.display="none";
 			}
 			

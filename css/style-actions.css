@@ -179,6 +179,7 @@
   background-color: white;
   display:none;
   width:200px;
+  z-index:10;
 }
 
 .button {

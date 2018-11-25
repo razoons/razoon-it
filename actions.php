@@ -128,7 +128,7 @@ if (isset($_SESSION['user'])){
 			<input type="hidden" id="team" name="team"/>
 			<input type="hidden" id="leak" name="leak"/>
 			<input type="hidden" id="leak_team" name="leak_team"/>
-			<button id="button_submit_action" class="button">Submit actions</button>
+			<div class="img_sprite"><img class="sprite2 sprite" id="button_submit_action" src="resources/submit.png"/></div>
 		</form>
 	</center>
 	<?php }else{ ?>
@@ -164,9 +164,16 @@ if (isset($_SESSION['user'])){
 		var input_leak = document.getElementById('leak');
 		var input_leak_team = document.getElementById('leak_team');
 		var input_admission = document.getElementById('team_admission');
+		var button_submit_action = document.getElementById('button_submit_action');
+		var submit_action = document.getElementById('submit_action');
+
+
 
 		for (i=0;i<img_sprite.length;i++){
 			img_sprite[i].addEventListener('click', action_click.bind(null,img_sprite[i]));
+		}
+
+		for (i=0;i<helper.length;i++){
 			helper[i].style.top=(img_sprite[i].offsetTop+130)+"px";
 			helper[i].style.left=img_sprite[i].offsetLeft+"px";
 		}
@@ -176,6 +183,12 @@ if (isset($_SESSION['user'])){
 			}else{
 				img_sprite_admission[i].addEventListener('click', admission_click.bind(null,img_sprite_admission[i]));
 			}
+		}
+
+		button_submit_action.addEventListener('click', to_submit.bind(null));
+
+		function to_submit(){
+			submit_action.submit();
 		}
 
 		function sprite_over3(obj){

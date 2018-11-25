@@ -9,3 +9,4 @@ TO FIX:
 FEATURES:
   [MEDIUM] To have the possibility to send anonymous messages to other team
   [MEDIUM] To have the detailed results displayed at the end of the game (who did what and when)
+  [MEDIUM] When creating a game, to be able to choose which days will be end of turns.

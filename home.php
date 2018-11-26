@@ -235,7 +235,61 @@ if (isset($_SESSION['user'])){
 			}?>
 
 	  </section>
+	<?php }
+	
+	if ($_SESSION['current_turn']==-1){?>
+		<section class="bdg-sect-header">
+			<h1>Score board</h1>
+		</section>
+		<section class="bdg-sect">
+		<table>
+			<tr style="background-color:#8c8888">
+				<th>User</th>
+				<th>Company</th>
+				<th>Coding</th>
+				<th>Hacking</th>
+				<th>Firewalling</th>
+				<th>Leaking</th>
+			</tr>
+		<?php
+			$req_list_users= $bdd->query('SELECT * FROM users WHERE game_id="'.$_SESSION['game_id'].'"');
+			while($list_users=$req_list_users->fetch()){
+				$req_list_teams= $bdd->query('SELECT team, color FROM teams WHERE game_id="'.$_SESSION['game_id'].'" AND id="'.$list_users['spy_team_id'].'"');
+				$team = $req_list_teams->fetch();
+				
+				echo '<tr style="background-color: #'.$team['color'].'">';
+				
+				echo "<th>".$list_users['user']."</th>";
+
+				echo "<th>".$team['team']."</th>";
+				
+				$req_code = $bdd->query('SELECT SUM(pts) AS total FROM actions WHERE game_id="'.$_SESSION['game_id'].'" AND user="'.$list_users['user'].'" AND action="code"');
+				$sum = $req_code->fetch();
+				$code = is_null($sum['total'])?0:$sum['total'];
+				echo "<th>".$code."</th>";
+				
+				$req_hack = $bdd->query('SELECT SUM(pts) AS total FROM actions WHERE game_id="'.$_SESSION['game_id'].'" AND user="'.$list_users['user'].'" AND action="hack"');
+				$sum = $req_hack->fetch();
+				$hack = is_null($sum['total'])?0:$sum['total'];
+				echo "<th>".$hack."</th>";
+				
+				$req_firewall = $bdd->query('SELECT SUM(pts) AS total FROM actions WHERE game_id="'.$_SESSION['game_id'].'" AND user="'.$list_users['user'].'" AND action="firewall"');
+				$sum = $req_firewall->fetch();
+				$firewall = is_null($sum['total'])?0:$sum['total'];
+				echo "<th>".$firewall."</th>";
+				
+				$req_leak = $bdd->query('SELECT SUM(pts_leak) AS total FROM actions WHERE game_id="'.$_SESSION['game_id'].'" AND user="'.$list_users['user'].'" AND leak_risk!=""');
+				$sum = $req_leak->fetch();
+				$leak = is_null($sum['total'])?0:$sum['total'];
+				echo "<th>".$leak."</th>";
+				
+				echo "</tr>";
+			}
+		?>
+		</table>
+	  </section>
 	<?php }?>
+	
   <script type="text/javascript">
 	<?php
 	if ($_SESSION['current_turn']==-1){?>

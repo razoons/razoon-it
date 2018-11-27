@@ -225,8 +225,11 @@ if (isset($_SESSION['user'])){
 				<?php }}else{?>
 					<div class="result_team"><img src="./resources/nothing.png"></div><span class="title_result">You didn't take any action last turn.</span> <?php }?>
 				<?php if ($actions['leak_team_id']!=-1 and !is_null($actions['leak_team_id'])){ ?>
-				<br/><div class="result_team"><img src="./resources/leak_<?php echo $actions['leak_risk'];?>.png"></div><span class="title_result">You leaked a <?php if($actions['leak_risk']=="low"){echo "small";}else{echo "huge";}?> piece of code to <b><?php echo $teams['team'][$actions['leak_team_id']];}?></b>.</span>
-				<?php for ($i=0;$i<count($list_users_snitched['user']);$i++){ ?>
+				<br/><div class="result_team"><img src="./resources/leak_<?php echo $actions['leak_risk'];?>.png"></div><span class="title_result">You leaked a <?php if($actions['leak_risk']=="low"){echo "small";}else{echo "huge";}?> piece of code to <b><?php echo $teams['team'][$actions['leak_team_id']];}
+				else{/*No action for this user but a row in DB*/?><div class="result_team"><img src="./resources/nothing.png"></div><span class="title_result">You didn't take any action last turn.</span> <?php
+				}?></b>.</span>
+				<?php //printing result of successful snitching
+				for ($i=0;$i<count($list_users_snitched['user']);$i++){ ?>
 					<?php if ($list_users_snitched['user'][$i]!=$_SESSION['user']){ ?>
 						<br/><div class="result_team"><img src="./resources/leak.png"></div><span class="title_result"><?php echo $list_users_snitched['user'][$i];?> was caught leaking code to <b><?php echo $teams['team'][$list_users_snitched['team_id'][$i]].'</b></span>'; }}
 

@@ -299,16 +299,6 @@ if (isset($_SESSION['user'])){
 		<table>
 			
 		<?php
-			$req_max_turn = $bdd->query('SELECT turns FROM games WHERE id="'.$_SESSION['game_id'].'"');
-			$max_turn = (int)$req_max_turn->fetch()[0];
-
-			$req_teams = $bdd->query('SELECT id, team, color FROM teams WHERE game_id="'.$_SESSION['game_id'].'"');
-			$teams = array();
-			while($team = $req_teams->fetch()){
-				$teams[$team['id']]['name'] = $team['team'];
-				$teams[$team['id']]['color'] = $team['color'];
-			}
-
 			$req_list_users= $bdd->query('SELECT user, spy_team_id FROM users WHERE game_id="'.$_SESSION['game_id'].'"');
 			$users = array();
 			while($user = $req_list_users->fetch()){
@@ -316,7 +306,7 @@ if (isset($_SESSION['user'])){
 			}
 
 			$req_list_turns= $bdd->prepare('SELECT * FROM actions WHERE game_id="'.$_SESSION['game_id'].'" AND turn=:turn ORDER BY user ASC');
-			for($i=1; $i<$max_turn+1; $i++)
+			for($i=1; $i<$current_game['turns']+1; $i++)
 			{
 				$req_list_turns->execute(array(':turn' => $i));
 				$table_print = '';
@@ -326,23 +316,23 @@ if (isset($_SESSION['user'])){
 					$action_null = false;
 					$leak_null = false;
 					
-					$temp_table_print .= '<tr style="background-color: #'.$teams[$users[$list_actions['user']]]['color'].'"><th>'.$list_actions['user'].'</th>';
+					$temp_table_print .= '<tr style="background-color: #'.$teams['color'][$users[$list_actions['user']]].'"><th>'.$list_actions['user'].'</th>';
 					if($list_actions['action']==''){
 						$temp_table_print .= '<th>-</th>';
 						$action_null = true;
 					}
 					elseif($list_actions['action']=='hack'){
-						$temp_table_print .= '<th>'.ucfirst($list_actions['action']).' '.$teams[$list_actions['target_team_id']]['name'].'</th>';
+						$temp_table_print .= '<th>'.ucfirst($list_actions['action']).' '.$teams['team'][$list_actions['target_team_id']].'</th>';
 					}
 					else{
-						$temp_table_print .= '<th>'.ucfirst($list_actions['action']).' in '.$teams[$list_actions['team_id']]['name'].'</th>';
+						$temp_table_print .= '<th>'.ucfirst($list_actions['action']).' in '.$teams['team'][$list_actions['team_id']].'</th>';
 					}
 
 					$temp_table_print .= '<th>'.$list_actions['pts'].'</th>';
 					if($list_actions['leak_risk'] != "" && $list_actions['leak_risk']!='0')
 					{
 						$temp_table_print .= '<th>'.ucfirst($list_actions['leak_risk']).'</th>';
-						$temp_table_print .= '<th>'.$teams[$list_actions['leak_team_id']]['name'].'</th>';
+						$temp_table_print .= '<th>'.$teams['team'][$list_actions['leak_team_id']].'</th>';
 						$temp_table_print .= '<th>'.$list_actions['pts_leak'].'</th>';	
 					}
 					else{

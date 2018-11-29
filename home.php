@@ -131,7 +131,7 @@ if (isset($_SESSION['user'])){
 				$color="black";
 			}else{
 				$background="#".$teams['color'][$list_users['spy_team_id']];
-				$color="#".$teams['font_color'][$list_users['spy_team_id']];
+				$color=$teams['font_color'][$list_users['spy_team_id']];
 			}?>
 			<section class="bdg-action-block-user" style="background-color:<?php echo $background;?>;color:<?php echo $color;?>;">
 			<h1 class="action-team-title action-user-title"><?php echo $list_users['user']; ?></h1></section>
@@ -269,10 +269,10 @@ if (isset($_SESSION['user'])){
 		<?php
 			$req_list_users= $bdd->query('SELECT * FROM users WHERE game_id="'.$_SESSION['game_id'].'" ORDER BY spy_team_id, user ASC');
 			while($list_users=$req_list_users->fetch()){
-				$req_list_teams= $bdd->query('SELECT team, color FROM teams WHERE game_id="'.$_SESSION['game_id'].'" AND id="'.$list_users['spy_team_id'].'"');
+				$req_list_teams= $bdd->query('SELECT team, color, font_color FROM teams WHERE game_id="'.$_SESSION['game_id'].'" AND id="'.$list_users['spy_team_id'].'"');
 				$team = $req_list_teams->fetch();
 
-				echo '<tr style="background-color: #'.$team['color'].'">';
+				echo '<tr style="background-color: #'.$team['color'].'; color:'.$team['font_color'].';>';
 
 				echo "<th>".$list_users['user']."</th>";
 
@@ -328,7 +328,7 @@ if (isset($_SESSION['user'])){
 					$action_null = false;
 					$leak_null = false;
 
-					$temp_table_print .= '<tr style="background-color: #'.$teams['color'][$users[$list_actions['user']]].';color: #'.$teams['font_color'][$users[$list_actions['user']]].'"><th>'.$list_actions['user'].'</th>';
+					$temp_table_print .= '<tr style="background-color: #'.$teams['color'][$users[$list_actions['user']]].';color:'.$teams['font_color'][$users[$list_actions['user']]].';"><th>'.$list_actions['user'].'</th>';
 					if($list_actions['action']==''){
 						$temp_table_print .= '<th>-</th>';
 						$action_null = true;

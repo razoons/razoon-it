@@ -198,10 +198,11 @@ if (isset($_SESSION['user'])){
 					$list_users_snitched['team_id'][]=$reports_leakers['leak_team_id'];
 				};
 
-
 				if ($actions['action']=="code"){ ?>
 					<div class="result_team"><img src="./resources/code.png"></div><span class="title_result">You were <?php $num = $reports_code['total_code']; if($num == 1){echo "alone";}else{echo "{$num} users";}?> coding for your company.</span>
-				<?php }elseif ($actions['action']=="hack"){?>
+				<?php }
+				
+				elseif ($actions['action']=="hack"){?>
 				<div class="result_team"><img src="./resources/hack.png"></div><span class="title_result">You were <?php $num = $reports_hack['total_hack']; if($num == 1){echo "alone";}else{echo "{$num} users";}?> hacking <b><?php echo $teams['team'][$reports_hack['target_team_id']];?></b> (<?php $num = $reports_hack['total_blocked']; echo $num; if($num == 1){echo " was";}else{echo " were";};?> blocked).<br/>
 					<?php
 					if($actions['blocked']==0){
@@ -218,16 +219,27 @@ if (isset($_SESSION['user'])){
 						<span class="bad">Your hack was blocked.</span>
 					<?php } ?>
 					</span>
-				<?php }elseif ($actions['action']=="snitch"){ ?>
+				<?php }
+				
+				elseif ($actions['action']=="snitch"){ ?>
 				<div class="result_team"><img src="./resources/snitch.png"></div><span class="title_result">You were <?php $num = $reports_snitch['total_snitch']; if($num == 1){echo "alone";} else{echo $num." users";}?> snitching.</span><br/>
-				<?php }elseif ($actions['action']=="firewall"){ ?>
+				<?php }
+				
+				elseif ($actions['action']=="firewall"){ ?>
 					<div class="result_team"><img src="./resources/firewall.png"></div><span class="title_result">You were <?php $num = $reports_firewall['total_firewall']; if($num == 1){echo "alone";}else{echo "{$num} users";};?> protecting <b><?php echo $teams['team'][$actions['team_id']];?></b>.<br/><?php $num = $reports_blocked['total_blocked']; echo $num; if($num==1){echo " hack";}else{echo " hacks";}?> prevented (+<?php echo $reports['blocking'];?>).</span> <br/>
-				<?php }}else{?>
-					<div class="result_team"><img src="./resources/nothing.png"></div><span class="title_result">You didn't take any action last turn.</span> <?php }?>
+				<?php }
+				elseif ($actions['action']==""){ //action empty?>
+					<div class="result_team"><img src="./resources/nothing.png"></div><span class="title_result">You didn't take any action last turn.</span> <?php 
+				}
+				
+				}else{?>
+					<div class="result_team"><img src="./resources/nothing.png"></div><span class="title_result">You didn't take any action last turn.</span> <?php 
+				}?>
+				
+				
 				<?php if ($actions['leak_team_id']!=-1 and !is_null($actions['leak_team_id'])){ ?>
 				<br/><div class="result_team"><img src="./resources/leak_<?php echo $actions['leak_risk'];?>.png"></div><span class="title_result">You leaked a <?php if($actions['leak_risk']=="low"){echo "small";}else{echo "huge";}?> piece of code to <b><?php echo $teams['team'][$actions['leak_team_id']];}
-				else{/*No action for this user but a row in DB*/?><div class="result_team"><img src="./resources/nothing.png"></div><span class="title_result">You didn't take any action last turn.</span> <?php
-				}?></b>.</span>
+				?></b>.</span>
 				<?php //printing result of successful snitching
 				for ($i=0;$i<count($list_users_snitched['user']);$i++){ ?>
 					<?php if ($list_users_snitched['user'][$i]!=$_SESSION['user']){ ?>

@@ -135,7 +135,7 @@ if (isset($_SESSION['user'])){
 		<center>
 		<form class="form" id="initialize_admission" action="initialize_admission.php" method="post">
 			<input type="hidden" id="team_admission" name="team_admission"/>
-			<button id="button_submit_admission" class="button">Submit admissions</button>
+			<div class="img_sprite_admission"><img class="sprite2 sprite" id="button_submit_admission" src="resources/submit.png"/></div>
 		</form>
 		</center>
 	<?php } ?>
@@ -166,8 +166,8 @@ if (isset($_SESSION['user'])){
 		var input_admission = document.getElementById('team_admission');
 		var button_submit_action = document.getElementById('button_submit_action');
 		var submit_action = document.getElementById('submit_action');
-
-
+		var button_submit_admission = document.getElementById('button_submit_admission');
+		var submit_admission = document.getElementById('initialize_admission');
 
 		for (i=0;i<img_sprite.length;i++){
 			img_sprite[i].addEventListener('click', action_click.bind(null,img_sprite[i]));
@@ -179,16 +179,21 @@ if (isset($_SESSION['user'])){
 		}
 
 		for (i=0;i<img_sprite_admission.length;i++){
-			if (img_sprite_admission[i].firstElementChild.getAttribute("data-selected")=="true"){
-			}else{
+			if (img_sprite_admission[i].firstElementChild.getAttribute("data-selected")!="true"){
 				img_sprite_admission[i].addEventListener('click', admission_click.bind(null,img_sprite_admission[i]));
 			}
 		}
-
-		button_submit_action.addEventListener('click', to_submit.bind(null));
+		if(submit_action)
+			button_submit_action.addEventListener('click', to_submit.bind(null));
+		else if(submit_admission)
+			button_submit_admission.addEventListener('click', to_submit_admission.bind(null));
 
 		function to_submit(){
 			submit_action.submit();
+		}
+		
+		function to_submit_admission(){
+			submit_admission.submit();
 		}
 
 		function sprite_over3(obj){

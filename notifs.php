@@ -11,9 +11,9 @@ while ($list_notifications=$req_list_notifications->fetch()){
 		}
 	}else if ($list_notifications['team_id']==$_SESSION['team_id']){
 		if ($list_notifications['type']=="exclusion"){
-			echo '<section class="bdg-sect-notif-bad">'.$list_notifications['user'].' has been excluded from your company</section>';
+			echo '<section class="bdg-sect-notif-bad">'.ucfirst($list_notifications['user']).' has been excluded from your company</section>';
 		}elseif ($list_notifications['type']=="admission"){
-			echo '<section class="bdg-sect-notif-good">Your company admitted '.$list_notifications['user'].' as a new member</section>';
+			echo '<section class="bdg-sect-notif-good">Your company admitted '.ucfirst($list_notifications['user']).' as a new member</section>';
 		}
 	}
 }

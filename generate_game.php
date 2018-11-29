@@ -21,11 +21,12 @@ $list_players=array();
 $dispatched_players=array();
 
 foreach($_POST['player'] as $player){
+	$player = strtolower($player);
 	if ($player<>""){
 		if (array_search($player, $existing_users)==""){
 			$list_players[]=$player;
 		}else{
-			$_SESSION['error']= "Player \"".$player."\" already exist.";
+			$_SESSION['error']= "Player \"".ucfirst($player)."\" already exist.";
 			header ("Location: create_game.php");
 		}
 	}

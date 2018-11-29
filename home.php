@@ -115,7 +115,7 @@ if (isset($_SESSION['user'])){
 			<?php $req_users=$bdd->query('SELECT * FROM users WHERE team_id="'.$list_teams['id'].'"');
 			while ($list_users=$req_users->fetch()){ ?>
 				<section class="bdg-action-block-user" style="background-color:#<?php if ($current_game['current_turn']==-1){echo $teams['color'][$list_users['spy_team_id']];}else{echo $list_teams['color'];} ?>;color:<?php if ($current_game['current_turn']==-1){echo $teams['font_color'][$list_users['spy_team_id']];}else{echo $list_teams['font_color'];} ?>;">
-				<h1 class="action-team-title action-user-title"><?php echo $list_users['user']; ?></h1></section>
+				<h1 class="action-team-title action-user-title"><?php echo ucfirst($list_users['user']); ?></h1></section>
 			<?php } ?>
 		</div>
     </section>
@@ -134,7 +134,7 @@ if (isset($_SESSION['user'])){
 				$color=$teams['font_color'][$list_users['spy_team_id']];
 			}?>
 			<section class="bdg-action-block-user" style="background-color:<?php echo $background;?>;color:<?php echo $color;?>;">
-			<h1 class="action-team-title action-user-title"><?php echo $list_users['user']; ?></h1></section>
+			<h1 class="action-team-title action-user-title"><?php echo ucfirst($list_users['user']); ?></h1></section>
 			<?php  } ?>
 	</div>
 	</section>
@@ -243,7 +243,7 @@ if (isset($_SESSION['user'])){
 				<?php //printing result of successful snitching
 				for ($i=0;$i<count($list_users_snitched['user']);$i++){ ?>
 					<?php if ($list_users_snitched['user'][$i]!=$_SESSION['user']){ ?>
-						<br/><div class="result_team"><img src="./resources/leak.png"></div><span class="title_result"><?php echo $list_users_snitched['user'][$i];?> was caught leaking code to <b><?php echo $teams['team'][$list_users_snitched['team_id'][$i]].'</b></span>'; }}
+						<br/><div class="result_team"><img src="./resources/leak.png"></div><span class="title_result"><?php echo ucfirst($list_users_snitched['user'][$i]);?> was caught leaking code to <b><?php echo $teams['team'][$list_users_snitched['team_id'][$i]].'</b></span>'; }}
 
 			}else{//no action for this user in DB?>
 				<div class="result_team"><img src="./resources/nothing.png"></div><span class="title_result">You didn't take any action last turn.</span> <?php
@@ -272,9 +272,9 @@ if (isset($_SESSION['user'])){
 				$req_list_teams= $bdd->query('SELECT team, color, font_color FROM teams WHERE game_id="'.$_SESSION['game_id'].'" AND id="'.$list_users['spy_team_id'].'"');
 				$team = $req_list_teams->fetch();
 
-				echo '<tr style="background-color: #'.$team['color'].'; color:'.$team['font_color'].';>';
+				echo '<tr style="background-color: #'.$team['color'].'; color:'.$team['font_color'].'">';
 
-				echo "<th>".$list_users['user']."</th>";
+				echo "<th>".ucfirst($list_users['user'])."</th>";
 
 				echo "<th>".$team['team']."</th>";
 
@@ -328,7 +328,7 @@ if (isset($_SESSION['user'])){
 					$action_null = false;
 					$leak_null = false;
 
-					$temp_table_print .= '<tr style="background-color: #'.$teams['color'][$users[$list_actions['user']]].';color:'.$teams['font_color'][$users[$list_actions['user']]].';"><th>'.$list_actions['user'].'</th>';
+					$temp_table_print .= '<tr style="background-color: #'.$teams['color'][$users[$list_actions['user']]].';color:'.$teams['font_color'][$users[$list_actions['user']]].';"><th>'.ucfirst($list_actions['user']).'</th>';
 					if($list_actions['action']==''){
 						$temp_table_print .= '<th>-</th>';
 						$action_null = true;

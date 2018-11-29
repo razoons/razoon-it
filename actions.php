@@ -128,14 +128,14 @@ if (isset($_SESSION['user'])){
 			<input type="hidden" id="team" name="team"/>
 			<input type="hidden" id="leak" name="leak"/>
 			<input type="hidden" id="leak_team" name="leak_team"/>
-			<div class="img_sprite"><img class="sprite2 sprite" id="button_submit_action" src="resources/submit.png"/></div>
+			<div class="img_sprite" data-type="button"><img class="sprite2 sprite" id="button_submit_action" src="resources/submit.png"/></div>
 		</form>
 	</center>
 	<?php }else{ ?>
 		<center>
 		<form class="form" id="initialize_admission" action="initialize_admission.php" method="post">
 			<input type="hidden" id="team_admission" name="team_admission"/>
-			<div class="img_sprite_admission"><img class="sprite2 sprite" id="button_submit_admission" src="resources/submit.png"/></div>
+			<div class="img_sprite_admission" data-type="button"><img class="sprite2 sprite" id="button_submit_admission" src="resources/submit.png"/></div>
 		</form>
 		</center>
 	<?php } ?>
@@ -170,7 +170,8 @@ if (isset($_SESSION['user'])){
 		var submit_admission = document.getElementById('initialize_admission');
 
 		for (i=0;i<img_sprite.length;i++){
-			img_sprite[i].addEventListener('click', action_click.bind(null,img_sprite[i]));
+			if(img_sprite[i].getAttribute("data-type")!="button")
+				img_sprite[i].addEventListener('click', action_click.bind(null,img_sprite[i]));
 		}
 
 		for (i=0;i<helper.length;i++){
@@ -179,7 +180,7 @@ if (isset($_SESSION['user'])){
 		}
 
 		for (i=0;i<img_sprite_admission.length;i++){
-			if (img_sprite_admission[i].firstElementChild.getAttribute("data-selected")!="true"){
+			if (img_sprite_admission[i].getAttribute("data-type")!="button" && img_sprite_admission[i].firstElementChild.getAttribute("data-selected")!="true"){
 				img_sprite_admission[i].addEventListener('click', admission_click.bind(null,img_sprite_admission[i]));
 			}
 		}
@@ -236,7 +237,7 @@ if (isset($_SESSION['user'])){
 
 		function unselectOther(obj){
 			for(i=0; i<img_sprite.length; i++){
-				if(img_sprite[i] != obj){
+				if(img_sprite[i] != obj && img_sprite[i].getAttribute("data-type")!="button"){
 					var dataType = obj.getAttribute("data-type");
 					if(dataType == "leak_low" || dataType == "leak_high"){
 						dataType = img_sprite[i].getAttribute("data-type");
@@ -337,6 +338,7 @@ if (isset($_SESSION['user'])){
 		}
 
 		window.onload = function () {
+			var new_position = 0;
 			for (i=0;i<sprites3.length;i++){
 				sprites3[i].addEventListener('mouseover', sprite_over3.bind(null,sprites3[i]));
 				sprites3[i].addEventListener('mouseout', sprite_out3.bind(null,sprites3[i]));

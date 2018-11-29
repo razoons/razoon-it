@@ -192,7 +192,7 @@ if (isset($_SESSION['user'])){
 		function to_submit(){
 			submit_action.submit();
 		}
-		
+
 		function to_submit_admission(){
 			submit_admission.submit();
 		}
@@ -265,6 +265,10 @@ if (isset($_SESSION['user'])){
 				obj.firstElementChild.setAttribute("data-selected", true);
 			}
 
+			check_selected();
+		}
+
+		function check_selected(){
 			var selected = document.querySelectorAll('[data-selected=true]');
 			input_leak.value = "";
 			input_leak_team.value = -1;
@@ -357,6 +361,7 @@ if (isset($_SESSION['user'])){
 				sprites2[i].addEventListener('mouseout', sprite_out2.bind(null,sprites2[i]));
 				}
 			}
+			check_selected();
 		}
 
 	</script>

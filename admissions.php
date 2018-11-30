@@ -59,7 +59,7 @@ if (isset($_SESSION['user'])){
     <form id="i6tj4i" method="post" action="update_admission.php">
 	<input type=hidden name="id" value="<?php echo $list_admissions['id']; ?>">
 	<input type=hidden name="vote_result" value="">
-        <div class="c7571">Admission of <?php echo $list_admissions['target_user'];?>
+        <div class="c7571">Admission of <?php echo ucfirst($list_admissions['target_user']);?>
         </div>
       <section id="irt3xr">
         <div class="c7693"><?php echo $votes_counts['total_votes'].'/'.$total_counts['total_votes'];?>

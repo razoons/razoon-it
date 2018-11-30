@@ -19,7 +19,7 @@ $action_exists->execute(array(
 //if action not been inserted yet, create it
 if(!$action_exists->fetch())
 {
-	$insert_action=$bdd->prepare('INSERT INTO actions(user,team_id,action,target_team_id,game_id,turn,blocked,leak_risk, leak_team_id, snitched) VALUES (:user,:team_id,"",-1,:game_id,:turn,0,0,-1,0)');
+	$insert_action=$bdd->prepare('INSERT INTO actions(user,team_id,action,target_team_id,game_id,turn,blocked,leak_risk, leak_team_id, snitched, pts, pts_leak) VALUES (:user,:team_id,"",-1,:game_id,:turn,0,"",-1,0,0,0)');
 	$insert_action->execute(array(
 		'user' => $_SESSION['user'],
 		'team_id' => $_SESSION['team_id'],

@@ -1,4 +1,4 @@
-<div class="c5145"><b><?php echo $_SESSION['user']?></b><br/><i>
+<div class="c5145"><b><?php echo ucfirst($_SESSION['user'])?></b><br/><i>
   <?php
     if ($_SESSION['current_turn']==-1){
       echo $current_spy_team['team'];

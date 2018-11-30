@@ -46,7 +46,7 @@
 						<div><div class="team_name" style="background-color:#<?php echo $list_teams['color'];?>;color:<?php echo $list_teams['font_color'];?>;"><?php echo $list_teams['team'];?></div>
 						<?php $req_list_users = $bdd->query('SELECT * FROM users WHERE game_id='.$list_games['id'].' and team_id='.$list_teams['id'].'');
 						while ($list_users=$req_list_users->fetch()){?>
-						<div class="team_member" style="background-color:#<?php echo $list_teams['color'];?>;color:<?php echo $list_teams['font_color'];?>;"><?php echo $list_users['user'];?></div>
+						<div class="team_member" style="background-color:#<?php echo $list_teams['color'];?>;color:<?php echo $list_teams['font_color'];?>;"><?php echo ucfirst($list_users['user']);?></div>
 					<?php }?>
 					</div></div>
 				<?php }?>

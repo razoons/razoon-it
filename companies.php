@@ -71,7 +71,7 @@ if (isset($_SESSION['user'])){
         <?php $req_users=$bdd->query('SELECT * FROM users WHERE team_id="'.$list_teams['id'].'"');
 		while ($list_users=$req_users->fetch()){ ?>
 			<section class="bdg-action-block-user" style="background-color:#<?php if ($current_game['current_turn']==-1){echo $teams['color'][$list_users['spy_team_id']];}else{echo $list_teams['color'];} ?>;color:<?php if ($current_game['current_turn']==-1){echo $teams['font_color'][$list_users['spy_team_id']];}else{echo $list_teams['font_color'];} ?>;">
-			<h1 class="action-team-title action-user-title"><?php echo $list_users['user']; ?></h1></section>
+			<h1 class="action-team-title action-user-title"><?php echo ucfirst($list_users['user']); ?></h1></section>
 		<?php } ?>
       </form>
     </section>

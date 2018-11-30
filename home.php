@@ -115,7 +115,7 @@ if (isset($_SESSION['user'])){
 			<?php $req_users=$bdd->query('SELECT * FROM users WHERE team_id="'.$list_teams['id'].'"');
 			while ($list_users=$req_users->fetch()){ ?>
 				<section class="bdg-action-block-user" style="background-color:#<?php if ($current_game['current_turn']==-1){echo $teams['color'][$list_users['spy_team_id']];}else{echo $list_teams['color'];} ?>;color:<?php if ($current_game['current_turn']==-1){echo $teams['font_color'][$list_users['spy_team_id']];}else{echo $list_teams['font_color'];} ?>;">
-				<h1 class="action-team-title action-user-title"><?php echo $list_users['user']; ?></h1></section>
+				<h1 class="action-team-title action-user-title"><?php echo ucfirst($list_users['user']); ?></h1></section>
 			<?php } ?>
 		</div>
     </section>
@@ -131,10 +131,10 @@ if (isset($_SESSION['user'])){
 				$color="black";
 			}else{
 				$background="#".$teams['color'][$list_users['spy_team_id']];
-				$color="#".$teams['font_color'][$list_users['spy_team_id']];
+				$color=$teams['font_color'][$list_users['spy_team_id']];
 			}?>
 			<section class="bdg-action-block-user" style="background-color:<?php echo $background;?>;color:<?php echo $color;?>;">
-			<h1 class="action-team-title action-user-title"><?php echo $list_users['user']; ?></h1></section>
+			<h1 class="action-team-title action-user-title"><?php echo ucfirst($list_users['user']); ?></h1></section>
 			<?php  } ?>
 	</div>
 	</section>
@@ -198,10 +198,11 @@ if (isset($_SESSION['user'])){
 					$list_users_snitched['team_id'][]=$reports_leakers['leak_team_id'];
 				};
 
-
 				if ($actions['action']=="code"){ ?>
 					<div class="result_team"><img src="./resources/code.png"></div><span class="title_result">You were <?php $num = $reports_code['total_code']; if($num == 1){echo "alone";}else{echo "{$num} users";}?> coding for your company.</span>
-				<?php }elseif ($actions['action']=="hack"){?>
+				<?php }
+
+				elseif ($actions['action']=="hack"){?>
 				<div class="result_team"><img src="./resources/hack.png"></div><span class="title_result">You were <?php $num = $reports_hack['total_hack']; if($num == 1){echo "alone";}else{echo "{$num} users";}?> hacking <b><?php echo $teams['team'][$reports_hack['target_team_id']];?></b> (<?php $num = $reports_hack['total_blocked']; echo $num; if($num == 1){echo " was";}else{echo " were";};?> blocked).<br/>
 					<?php
 					if($actions['blocked']==0){
@@ -218,24 +219,160 @@ if (isset($_SESSION['user'])){
 						<span class="bad">Your hack was blocked.</span>
 					<?php } ?>
 					</span>
-				<?php }elseif ($actions['action']=="snitch"){ ?>
+				<?php }
+
+				elseif ($actions['action']=="snitch"){ ?>
 				<div class="result_team"><img src="./resources/snitch.png"></div><span class="title_result">You were <?php $num = $reports_snitch['total_snitch']; if($num == 1){echo "alone";} else{echo $num." users";}?> snitching.</span><br/>
-				<?php }elseif ($actions['action']=="firewall"){ ?>
+				<?php }
+
+				elseif ($actions['action']=="firewall"){ ?>
 					<div class="result_team"><img src="./resources/firewall.png"></div><span class="title_result">You were <?php $num = $reports_firewall['total_firewall']; if($num == 1){echo "alone";}else{echo "{$num} users";};?> protecting <b><?php echo $teams['team'][$actions['team_id']];?></b>.<br/><?php $num = $reports_blocked['total_blocked']; echo $num; if($num==1){echo " hack";}else{echo " hacks";}?> prevented (+<?php echo $reports['blocking'];?>).</span> <br/>
-				<?php }}else{?>
-					<div class="result_team"><img src="./resources/nothing.png"></div><span class="title_result">You didn't take any action last turn.</span> <?php }?>
+				<?php }
+				elseif ($actions['action']==""){ //action empty?>
+					<div class="result_team"><img src="./resources/nothing.png"></div><span class="title_result">You didn't take any action last turn.</span> <?php
+				}
+
+				}else{?>
+					<div class="result_team"><img src="./resources/nothing.png"></div><span class="title_result">You didn't take any action last turn.</span> <?php
+				}?>
+
+
 				<?php if ($actions['leak_team_id']!=-1 and !is_null($actions['leak_team_id'])){ ?>
-				<br/><div class="result_team"><img src="./resources/leak_<?php echo $actions['leak_risk'];?>.png"></div><span class="title_result">You leaked a <?php if($actions['leak_risk']=="low"){echo "small";}else{echo "huge";}?> piece of code to <b><?php echo $teams['team'][$actions['leak_team_id']];}?></b>.</span>
-				<?php for ($i=0;$i<count($list_users_snitched['user']);$i++){ ?>
+				<br/><div class="result_team"><img src="./resources/leak_<?php echo $actions['leak_risk'];?>.png"></div><span class="title_result">You leaked a <?php if($actions['leak_risk']=="low"){echo "small";}else{echo "huge";}?> piece of code to <b><?php echo $teams['team'][$actions['leak_team_id']];?></b><?php echo ". (".$actions['pts_leak']." lines)";}
+				?></span>
+				<?php //printing result of successful snitching
+				for ($i=0;$i<count($list_users_snitched['user']);$i++){ ?>
 					<?php if ($list_users_snitched['user'][$i]!=$_SESSION['user']){ ?>
-						<br/><div class="result_team"><img src="./resources/leak.png"></div><span class="title_result"><?php echo $list_users_snitched['user'][$i];?> was caught leaking code to <b><?php echo $teams['team'][$list_users_snitched['team_id'][$i]].'</b></span>'; }}
+						<br/><div class="result_team"><img src="./resources/deal.png"></div><span class="title_result"><?php echo ucfirst($list_users_snitched['user'][$i]);?> was caught leaking code to <b><?php echo $teams['team'][$list_users_snitched['team_id'][$i]].'</b></span>'; }}
 
 			}else{//no action for this user in DB?>
 				<div class="result_team"><img src="./resources/nothing.png"></div><span class="title_result">You didn't take any action last turn.</span> <?php
 			}?>
 
 	  </section>
+	<?php }
+
+	if ($_SESSION['current_turn']==-1){?>
+		<section class="bdg-sect-header">
+			<h1>Score board</h1>
+		</section>
+		<section class="bdg-sect">
+		<table>
+			<tr style="background-color:#8c8888">
+				<th>User</th>
+				<th>Real Company</th>
+				<th>Coding</th>
+				<th>Hacking</th>
+				<th>Firewalling</th>
+				<th>Leaking</th>
+			</tr>
+		<?php
+			$req_list_users= $bdd->query('SELECT * FROM users WHERE game_id="'.$_SESSION['game_id'].'" ORDER BY spy_team_id, user ASC');
+			while($list_users=$req_list_users->fetch()){
+				$req_list_teams= $bdd->query('SELECT team, color, font_color FROM teams WHERE game_id="'.$_SESSION['game_id'].'" AND id="'.$list_users['spy_team_id'].'"');
+				$team = $req_list_teams->fetch();
+
+				echo '<tr style="background-color: #'.$team['color'].'; color:'.$team['font_color'].'">';
+
+				echo "<th>".ucfirst($list_users['user'])."</th>";
+
+				echo "<th>".$team['team']."</th>";
+
+				$req_code = $bdd->query('SELECT SUM(pts) AS total FROM actions WHERE game_id="'.$_SESSION['game_id'].'" AND user="'.$list_users['user'].'" AND action="code"');
+				$sum = $req_code->fetch();
+				$code = is_null($sum['total'])?0:$sum['total'];
+				echo "<th>".$code."</th>";
+
+				$req_hack = $bdd->query('SELECT SUM(pts) AS total FROM actions WHERE game_id="'.$_SESSION['game_id'].'" AND user="'.$list_users['user'].'" AND action="hack"');
+				$sum = $req_hack->fetch();
+				$hack = is_null($sum['total'])?0:$sum['total'];
+				echo "<th>".$hack."</th>";
+
+				$req_firewall = $bdd->query('SELECT SUM(pts) AS total FROM actions WHERE game_id="'.$_SESSION['game_id'].'" AND user="'.$list_users['user'].'" AND action="firewall"');
+				$sum = $req_firewall->fetch();
+				$firewall = is_null($sum['total'])?0:$sum['total'];
+				echo "<th>".$firewall."</th>";
+
+				$req_leak = $bdd->query('SELECT SUM(pts_leak) AS total FROM actions WHERE game_id="'.$_SESSION['game_id'].'" AND user="'.$list_users['user'].'" AND leak_risk!=""');
+				$sum = $req_leak->fetch();
+				$leak = is_null($sum['total'])?0:$sum['total'];
+				echo "<th>".$leak."</th>";
+
+				echo "</tr>";
+			}
+		?>
+		</table>
+	  </section>
+
+	  <section class="bdg-sect-header">
+			<h1>Chronology</h1>
+		</section>
+		<section class="bdg-sect">
+		<table>
+
+		<?php
+			$req_list_users= $bdd->query('SELECT user, spy_team_id FROM users WHERE game_id="'.$_SESSION['game_id'].'"');
+			$users = array();
+			while($user = $req_list_users->fetch()){
+				$users[$user['user']] = $user['spy_team_id'];
+			}
+
+			$req_list_turns= $bdd->prepare('SELECT * FROM actions WHERE game_id="'.$_SESSION['game_id'].'" AND turn=:turn ORDER BY user ASC');
+			for($i=1; $i<$current_game['turns']+1; $i++)
+			{
+				$req_list_turns->execute(array(':turn' => $i));
+				$table_print = '';
+				while($list_actions=$req_list_turns->fetch())
+				{
+					$temp_table_print = '';
+					$action_null = false;
+					$leak_null = false;
+
+					$temp_table_print .= '<tr style="background-color: #'.$teams['color'][$users[$list_actions['user']]].';color:'.$teams['font_color'][$users[$list_actions['user']]].';"><th>'.ucfirst($list_actions['user']).'</th>';
+					if($list_actions['action']==''){
+						$temp_table_print .= '<th>-</th>';
+						$action_null = true;
+					}
+					elseif($list_actions['action']=='hack'){
+						$temp_table_print .= '<th>'.ucfirst($list_actions['action']).' '.$teams['team'][$list_actions['target_team_id']].'</th>';
+					}
+					else{
+						$temp_table_print .= '<th>'.ucfirst($list_actions['action']).' in '.$teams['team'][$list_actions['team_id']].'</th>';
+					}
+
+					$temp_table_print .= '<th>'.$list_actions['pts'].'</th>';
+					if($list_actions['leak_risk'] != "" && $list_actions['leak_risk']!='0')
+					{
+						$temp_table_print .= '<th>'.ucfirst($list_actions['leak_risk']).'</th>';
+						$temp_table_print .= '<th>'.$teams['team'][$list_actions['leak_team_id']].'</th>';
+						$temp_table_print .= '<th>'.$list_actions['pts_leak'].'</th>';
+					}
+					else{
+						$leak_null = true;
+						$temp_table_print .= '<th>-</th>';
+						$temp_table_print .= '<th>-</th>';
+						$temp_table_print .= '<th>-</th>';
+					}
+					$temp_table_print .= '</tr>';
+
+					if(!$action_null || !$leak_null){
+						$table_print .= $temp_table_print;
+					}
+				}
+				if($table_print != '')
+				{
+					//Turn #
+					echo '<tr style="background-color:#8c8888"><th colspan="6">Turn '.$i.'</th></tr>';
+					echo '<tr><th>User</th> <th>Action</th> <th>Lines produced</th> <th>Leak</th> <th>Sent to</th> <th>Lines sent</th></tr>';
+					echo $table_print;
+					echo '<tr><th colspan="6"></th></tr>';
+				}
+			}
+		?>
+		</table>
+	  </section>
 	<?php }?>
+
   <script type="text/javascript">
 	<?php
 	if ($_SESSION['current_turn']==-1){?>

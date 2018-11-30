@@ -28,7 +28,7 @@ if (!$resultat)
 }
 else
 {
-	$_SESSION['user'] = $_POST['user'];
+	$_SESSION['user'] = strtolower($_POST['user']);
 	$_SESSION['game_id'] = $resultat['game_id'];
 	$_SESSION['team_id'] = $resultat['team_id'];
   $_SESSION['spy_team_id'] = $resultat['spy_team_id'];

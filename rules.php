@@ -32,7 +32,9 @@ session_start();
 	During a game, several companies are fighting to be the most advanced one and you are one of those companies employee.
 	<br/>However, there might be spies in each company. (the number of spies per company is determined during the game initialization).
 	<br/>The only person knowing the real identity of the spy, is the spy him(her)self. Each user can check its real company in the <b>configuration</b> menu.
-	<br/><br/>During the game, a user can be fired from a company and hired by another one. Nevertheless, he/she will always belong to his/he real company.
+  <br/><div class="result_team"><img src="./resources/not_spy_black.png"></div><div class="explain_1"><b>Not a spy:</b> If you see this icon with the name of your company, it means you are not a spy</div>
+  <div class="result_team"><img src="./resources/spy_black.png"></div><div class="explain_1"><b>Spy:</b> If you see this icon, it means you are a spy and your real company is the one written below the icon</div>
+  <br/><br/>During the game, a user can be fired from a company and hired by another one. Nevertheless, he/she will always belong to his/he real company.
 	<br/><u>A user wins the game if his/her real company wins.</u>
 	<br/><br/><i>In the following: if the term used is <u>company</u>, it will refer to the company that employs the user; if the term is <u>real company</u>, it will refer to the company to which the user belongs for real.</i>
 	<br/><br/>At the beginning of the game, it is possible to choose a new name for the company and a color. Once updated, it will not be possible to change again.

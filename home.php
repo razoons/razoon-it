@@ -250,9 +250,14 @@ if (isset($_SESSION['user'])){
 			}?>
 
 			<br/>
-			<div class="result_team"><img src="./resources/code.png"></div><span class="title_result">You were <?php $num = $reports_code['total_code']; if($num == 1){echo "alone";}else{echo "{$num} users";}?> coding for your company.</span>
+			<div class="result_team"><img src="./resources/code.png"></div><span class="title_result good">Your team coded <?php echo $reports['code'];?> lines</span>
 			<br/>
-			<div class="result_team"><img src="./resources/hack.png"></div><span class="title_result">You were <?php $num = $reports_hack['total_hack']; if($num == 1){echo "alone";}else{echo "{$num} users";}?> hacking <b><?php echo $teams['team'][$reports_hack['target_team_id']];?></b> (<?php $num = $reports_hack['total_blocked']; echo $num; if($num == 1){echo " was";}else{echo " were";};?> blocked).<br/>
+			<div class="result_team"><img src="./resources/hack.png"></div><span class="title_result good">Your team stole <?php echo $reports['hack'];?> lines</span>
+			<br/>
+			<div class="result_team"><img src="./resources/hack.png"></div><span class="title_result bad">Your team has been stolen <?php echo $reports['hacked'];?> lines</span>
+			<br/>
+			<div class="result_team"><img src="./resources/leak_low.png"></div><span class="title_result good">Your team leaked <?php echo $reports['leak'];?> lines</span>
+			<br/>
 
 
 	  </section>

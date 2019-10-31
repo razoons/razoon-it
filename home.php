@@ -142,21 +142,15 @@ if (isset($_SESSION['user'])){
   </section>
 
 	<section class="bdg-sect-header">
-	<h1>Results of the team</h1>
+	<h1>Teams progression</h1>
 	</section>
 		<section class="bdg-sect">
-			<?php if (($_SESSION['current_turn']<>1) AND ($_SESSION['team_id']<>"")){
-			$req_reports=$bdd->query('SELECT * FROM reports WHERE team_id='.$_SESSION['team_id'].' AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.'');
-			$reports=$req_reports->fetch();
-			$total= $reports['code']+$reports['hack']-$reports['hacked']+$reports['blocking']-$reports['blocked']+$reports['leak'];
-			?>
-	    <div class="result_team"><img src="./resources/graph.png"></div><span class="title_result"><?php if ($total>=0){ echo 'Your company produced '.$total.' lines of code.</span>';}else{echo 'Your company lost '.abs($total).' lines of code.</span>';}?>
-			<br/><br/><?php }?><div id="chartContainer" style="height: 370px; width: 100%;"></div>
+			<div id="chartContainer" style="height: 370px; width: 100%;"></div>
 		</section>
 	<?php
 	if ($_SESSION['current_turn']<>1){?>
 		<section class="bdg-sect-header">
-			<h1>Results of your action</h1>
+			<h1>Results of last turn</h1>
 		</section>
 		<section class="bdg-sect">
 		<?php
@@ -248,16 +242,29 @@ if (isset($_SESSION['user'])){
 			}else{//no action for this user in DB?>
 				<div class="result_team"><img src="./resources/nothing.png"></div><span class="title_result">You didn't take any action last turn.</span> <?php
 			}?>
+			<div class="separator"></div>
 
-			<br/>
-			<div class="result_team"><img src="./resources/code.png"></div><span class="title_result good">Your team coded <?php echo $reports['code'];?> lines</span>
-			<br/>
-			<div class="result_team"><img src="./resources/hack.png"></div><span class="title_result good">Your team stole <?php echo $reports['hack'];?> lines</span>
-			<br/>
-			<div class="result_team"><img src="./resources/hack.png"></div><span class="title_result bad">Your team has been stolen <?php echo $reports['hacked'];?> lines</span>
-			<br/>
-			<div class="result_team"><img src="./resources/leak_low.png"></div><span class="title_result good">Your team leaked <?php echo $reports['leak'];?> lines</span>
-			<br/>
+			<?php if (($_SESSION['current_turn']<>1) AND ($_SESSION['team_id']<>"")){
+			$req_reports=$bdd->query('SELECT * FROM reports WHERE team_id='.$_SESSION['team_id'].' AND game_id='.$_SESSION['game_id'].' AND turn='.$previous_turn.'');
+			$reports=$req_reports->fetch();
+			$total= $reports['code']+$reports['hack']-$reports['hacked']+$reports['blocking']-$reports['blocked']+$reports['leak'];
+			?>
+			<div class="area_50">
+				<div class="result_team"><img src="./resources/code_green.png"></div><span class="title_result"><?php echo $reports['code'];?> lines coded</span>
+				<br/><br/>
+				<div class="result_team"><img src="./resources/firewall_green.png"></div><span class="title_result"><?php echo $reports['blocking'];?> lines stolen</span>
+				<br/><br/>
+				<div class="result_team"><img src="./resources/hack_green.png"></div><span class="title_result"><?php echo $reports['hack'];?> lines stolen</span>
+				<br/><br/>
+				<div class="result_team"><img src="./resources/leak_green.png"></div><span class="title_result"><?php echo $reports['leak'];?> lines leaked</span>
+			</div>
+			<div class="area_50">
+				<div class="result_team"><img src="./resources/firewall_red.png"></div><span class="title_result"><?php echo $reports['blocked'];?> lines stolen</span>
+				<br/><br/>
+				<div class="result_team"><img src="./resources/hack_red.png"></div><span class="title_result"><?php echo $reports['hacked'];?> lines stolen</span>
+			</div>
+			<div class="separator"></div><div class="separator"></div>
+	    <div class="result_team"><img src="./resources/graph.png"></div><span class="title_result"><?php if ($total>=0){ echo '+ '.$total.' lines of code.</span>';}else{echo '- '.abs($total).' lines of code.</span>';}?><?php }?>
 
 
 	  </section>

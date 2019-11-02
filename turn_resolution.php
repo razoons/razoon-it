@@ -218,31 +218,37 @@ while ($list_games=$req_list_games->fetch()){
 			$new_production['leak'][$list_teams['id']]=0;
 
 			//receiving low risk leaks
-			$req_list_low_leak = $bdd->query('SELECT team_id, COUNT(*) as count_low_leak FROM actions WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND leak_team_id='.$list_teams['id'].' AND leak_risk="low" GROUP BY team_id');
+			$req_list_low_leak = $bdd->query('SELECT team_id, COUNT(*) as count_low_leak, snitched FROM actions WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND leak_team_id='.$list_teams['id'].' AND leak_risk="low" GROUP BY team_id');
 
 			while($list_low_leak=$req_list_low_leak->fetch()){
-				//Leaking gain is minimum between default value and current production progress
-				$low_leaking_gain = min($teams[$list_low_leak['team_id']]['production_progress']+$new_production['code'][$list_low_leak['team_id']]-$new_production['hacked'][$list_low_leak['team_id']],$list_low_leak['count_low_leak']*$configuration['leak_low']);
 
-				//Receiving leak team gains production
-				$new_production['leak'][$list_teams['id']] += $low_leaking_gain;
+				if ($list_low_leak['snitched']!=1){
+					//Leaking gain is minimum between default value and current production progress
+					$low_leaking_gain = min($teams[$list_low_leak['team_id']]['production_progress']+$new_production['code'][$list_low_leak['team_id']]-$new_production['hacked'][$list_low_leak['team_id']],$list_low_leak['count_low_leak']*$configuration['leak_low']);
 
-				//Update pts sent for low leakers
-				$bdd->query('UPDATE actions SET pts_leak='.$low_leaking_gain/$list_low_leak['count_low_leak'].' WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND team_id='.$list_low_leak['team_id'].' AND leak_team_id='.$list_teams['id'].' AND leak_risk="low"');
+					//Receiving leak team gains production
+					$new_production['leak'][$list_teams['id']] += $low_leaking_gain;
+
+					//Update pts sent for low leakers
+					$bdd->query('UPDATE actions SET pts_leak='.$low_leaking_gain/$list_low_leak['count_low_leak'].' WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND team_id='.$list_low_leak['team_id'].' AND leak_team_id='.$list_teams['id'].' AND leak_risk="low"');
+				}
 			}
 
 			//receiving high risk leaks
-			$req_list_high_leak = $bdd->query('SELECT team_id, COUNT(*) as count_high_leak FROM actions WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND leak_team_id='.$list_teams['id'].' AND leak_risk="high" GROUP BY team_id');
+			$req_list_high_leak = $bdd->query('SELECT team_id, COUNT(*) as count_high_leak, snitched FROM actions WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND leak_team_id='.$list_teams['id'].' AND leak_risk="high" GROUP BY team_id');
 
 			while($list_high_leak=$req_list_high_leak->fetch()){
-				//Leaking gain is minimum between default value and current production progress
-				$high_leaking_gain = min($teams[$list_high_leak['team_id']]['production_progress']+$new_production['code'][$list_high_leak['team_id']]-$new_production['hacked'][$list_high_leak['team_id']],$list_high_leak['count_high_leak']*$configuration['leak_high']);
 
-				//Receiving leak team gains production
-				$new_production['leak'][$list_teams['id']] += $high_leaking_gain;
+				if ($list_high_leak['snitched']!=1){
+					//Leaking gain is minimum between default value and current production progress
+					$high_leaking_gain = min($teams[$list_high_leak['team_id']]['production_progress']+$new_production['code'][$list_high_leak['team_id']]-$new_production['hacked'][$list_high_leak['team_id']],$list_high_leak['count_high_leak']*$configuration['leak_high']);
 
-				//Update pts sent for high leakers
-				$bdd->query('UPDATE actions SET pts_leak='.$high_leaking_gain/$list_high_leak['count_high_leak'].' WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND team_id='.$list_high_leak['team_id'].' AND leak_team_id='.$list_teams['id'].' AND leak_risk="high"');
+					//Receiving leak team gains production
+					$new_production['leak'][$list_teams['id']] += $high_leaking_gain;
+
+					//Update pts sent for high leakers
+					$bdd->query('UPDATE actions SET pts_leak='.$high_leaking_gain/$list_high_leak['count_high_leak'].' WHERE game_id='.$list_games['id'].' AND turn='.$list_games['current_turn'].' AND team_id='.$list_high_leak['team_id'].' AND leak_team_id='.$list_teams['id'].' AND leak_risk="high"');
+				}
 			}
 
 			//-----------------TOTAL PRODUCTION-----------------------------------

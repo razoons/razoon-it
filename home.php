@@ -232,7 +232,7 @@ if (isset($_SESSION['user'])){
 
 
 				<?php if ($actions['leak_team_id']!=-1 and !is_null($actions['leak_team_id'])){ ?>
-				<br/><div class="result_team"><img src="./resources/leak_<?php echo $actions['leak_risk'];?>.png"></div><span class="title_result">You leaked a <?php if($actions['leak_risk']=="low"){echo "small";}else{echo "huge";}?> piece of code to <b><?php echo $teams['team'][$actions['leak_team_id']];?></b><?php echo ". (".$actions['pts_leak']." lines)";}
+				<br/><br/><div class="result_team"><img src="./resources/leak_<?php echo $actions['leak_risk'];?>.png"></div><span class="title_result">You leaked a <?php if($actions['leak_risk']=="low"){echo "small";}else{echo "huge";}?> piece of code to <b><?php echo $teams['team'][$actions['leak_team_id']];?></b><?php echo ". (".$actions['pts_leak']." lines)";}
 				?></span>
 				<?php //printing result of successful snitching
 				for ($i=0;$i<count($list_users_snitched['user']);$i++){ ?>

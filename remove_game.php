@@ -18,5 +18,7 @@ $remove_users=$bdd->exec('DELETE FROM users WHERE game_id='.$_POST['game_id'].''
 
 $remove_games=$bdd->exec('DELETE FROM games WHERE id='.$_POST['game_id'].'');
 
+$remove_reports=$bdd->exec('DELETE FROM reports WHERE game_id='.$_POST['game_id'].'');
+
 header ("Location: admin_games.php");
 ?>

@@ -7,6 +7,9 @@ TO FIX:
  [LOW] Team A = a1 & a2. b and c are excluded. They both send admissions to Team A. a1 and a2 accept b but don't respond to c's admission. Next turn, a1 and a2 will be able to vote for c's admission from last turn. But b won't be able to vote.
  [MEDIUM] if low and high leaks from same team, there is no check for minimum value of code. (ex : TEAM A (300 lines) makes 1 low leak and 1 high leak to Team B. Team B is supposed to get only 300 lines (150+150 or 0+300) but gets 450 (150+300))
 
+IMPROVEMENTS:
+-to have a maximum number of members per team (to avoid unbalanced game). So if a member applies to a company already full, the members have to exclude before hiring
+
 FEATURES:
   [MEDIUM] To have the possibility to send anonymous messages to other team
   [MEDIUM] When creating a game, to be able to choose which days will be end of turns.

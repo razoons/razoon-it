@@ -80,7 +80,7 @@ if (isset($_SESSION['user'])){
       <?php
 		$req=$bdd->query('SELECT * FROM users WHERE team_id="'.$current_team['id'].'" AND user<>"'.$_SESSION['user'].'"');
 		while ($list_users=$req->fetch()){
-			if (in_array($list_users['user'],$list_votes)==FALSE){?>
+			if (in_array(ucfirst($list_users['user']),$list_votes)==FALSE){?>
 	  <option value="<?php echo ucfirst($list_users['user']);?>"><?php echo ucfirst($list_users['user']);?></option>
 	<?php }} ?>
       </select>

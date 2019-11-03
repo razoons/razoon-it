@@ -193,11 +193,11 @@ if (isset($_SESSION['user'])){
 				};
 
 				if ($actions['action']=="code"){ ?>
-					<div class="result_team"><img src="./resources/code.png"></div><span class="title_result">You were <?php $num = $reports_code['total_code']; if($num == 1){echo "alone";}else{echo "{$num} users";}?> coding for your company.</span>
+					<div class="result_team"><img src="./resources/code.png"></div><span class="title_result">You coded for your company.</span>
 				<?php }
 
 				elseif ($actions['action']=="hack"){?>
-				<div class="result_team"><img src="./resources/hack.png"></div><span class="title_result">You were <?php $num = $reports_hack['total_hack']; if($num == 1){echo "alone";}else{echo "{$num} users";}?> hacking <b><?php echo $teams['team'][$reports_hack['target_team_id']];?></b> (<?php $num = $reports_hack['total_blocked']; echo $num; if($num == 1){echo " was";}else{echo " were";};?> blocked).<br/>
+				<div class="result_team"><img src="./resources/hack.png"></div><span class="title_result">You hacked <b><?php echo $teams['team'][$reports_hack['target_team_id']];?></b>.<br/>
 					<?php
 					if($actions['blocked']==0){
 						if($reports['hack']==$configuration['hack_gain']* ($reports_hack['total_hack']-$reports_hack['total_blocked'])){
@@ -216,11 +216,11 @@ if (isset($_SESSION['user'])){
 				<?php }
 
 				elseif ($actions['action']=="snitch"){ ?>
-				<div class="result_team"><img src="./resources/snitch.png"></div><span class="title_result">You were <?php $num = $reports_snitch['total_snitch']; if($num == 1){echo "alone";} else{echo $num." users";}?> snitching.</span><br/>
+				<div class="result_team"><img src="./resources/snitch.png"></div><span class="title_result">You snitched.</span><br/>
 				<?php }
 
 				elseif ($actions['action']=="firewall"){ ?>
-					<div class="result_team"><img src="./resources/firewall.png"></div><span class="title_result">You were <?php $num = $reports_firewall['total_firewall']; if($num == 1){echo "alone";}else{echo "{$num} users";};?> protecting <b><?php echo $teams['team'][$actions['team_id']];?></b>.<br/><?php $num = $reports_blocked['total_blocked']; echo $num; if($num==1){echo " hack";}else{echo " hacks";}?> prevented (+<?php echo $reports['blocking'];?>).</span> <br/>
+					<div class="result_team"><img src="./resources/firewall.png"></div><span class="title_result">You protected <b><?php echo $teams['team'][$actions['team_id']];?></b>.<br/><?php $num = $reports_blocked['total_blocked']; echo $num; if($num==1){echo " hack";}else{echo " hacks";}?> prevented (+<?php echo $reports['blocking'];?>).</span> <br/>
 				<?php }
 				elseif ($actions['action']==""){ //action empty?>
 					<div class="result_team"><img src="./resources/nothing.png"></div><span class="title_result">You didn't take any action last turn.</span> <?php

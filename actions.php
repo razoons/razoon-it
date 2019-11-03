@@ -20,6 +20,18 @@ if (isset($_SESSION['user'])){
   $req=$bdd->query('SELECT * FROM actions WHERE user="'.$_SESSION['user'].'" AND turn='.$_SESSION['current_turn'].'');
   $action=$req->fetch();
 
+	$total_users=0;
+	$total_teams=0;
+	$req=$bdd->query('SELECT team_id, COUNT(*) as number FROM `users` WHERE game_id="'.$_SESSION['game_id'].'" GROUP BY team_id');
+	while ($number_users=$req->fetch()){
+		$total_users+=$number_users['number'];
+		if ($number_users['team_id']!=NULL){
+			$total_teams+=1;
+		}
+	}
+	echo $total_teams;
+	echo $total_users;
+
 	$req_configuration = $bdd->query('SELECT * FROM configuration');
 	$configuration=$req_configuration->fetch();
 
@@ -109,7 +121,7 @@ if (isset($_SESSION['user'])){
 			</div>
 			<div class="helper">You give +<?php echo $configuration['leak_high'];?> lines of code from your team and send it to <?php echo $list_teams['team'];?>.</div>
 
-			<?php }}else{?>
+		<?php }}else{ if($total_users/$total_teams+$configuration['max_users']>$nbr_users_team['user_nbr']){?>
 			<div class="img_sprite_admission" data-type="admission" data-id=<?php echo $list_teams['id']; ?>>
 				<?php if (in_array($list_teams['id'],$admissions)){?>
 					<img class="sprite" src="resources/hire_ok.png" data-selected="true">
@@ -117,7 +129,7 @@ if (isset($_SESSION['user'])){
 					<img class="sprite3 sprite" src="resources/hire.png" data-selected="false">
 				<?php } ?>
 			</div>
-			<?php }?>
+		<?php }}?>
 		</section>
 	<?php }
 	if(isset($current_team['id']))

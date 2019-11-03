@@ -10,7 +10,7 @@ $configuration=$req_configuration->fetch();
 
 $req_list_games = $bdd->query('SELECT * FROM games');
 while ($list_games=$req_list_games->fetch()){
-	if ((date( "w")!=0) AND (date( "w")!=6) AND ($list_games['current_turn']<>-1)){
+	if ((((date("w")!=0) AND (date("w")!=6)) OR (isset($_GET['forced']))) AND ($list_games['current_turn']<>-1)){
 		$target_reached=false;
 		$new_production=array();
 
